@@ -30,28 +30,8 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden pb-10 pt-32 sm:pb-14"
+      className="relative flex min-h-[88svh] flex-col justify-end overflow-hidden pb-10 pt-32 sm:pb-14 lg:min-h-[min(100svh,780px)]"
     >
-      {/* Studio meta, hung high so the hero reads as a masthead. */}
-      <motion.dl
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.75 }}
-        className="mx-auto mb-auto grid w-full max-w-[1560px] grid-cols-2 gap-6 px-5 text-[0.78rem] sm:px-8 md:grid-cols-4 lg:px-12"
-      >
-        {[
-          ["Est.", String(site.founded)],
-          ["Studios", "Lagos · Toronto"],
-          ["Clients", "160+ and counting"],
-          ["Disciplines", "Brand · Digital · Strategy · Content"],
-        ].map(([term, value]) => (
-          <div key={term}>
-            <dt className="text-label uppercase text-ink-soft">{term}</dt>
-            <dd className="mt-1.5 font-semibold tracking-[-0.01em]">{value}</dd>
-          </div>
-        ))}
-      </motion.dl>
-
       <motion.div
         style={calm ? undefined : { y, opacity }}
         className="mx-auto w-full max-w-[1560px] px-5 sm:px-8 lg:px-12"
