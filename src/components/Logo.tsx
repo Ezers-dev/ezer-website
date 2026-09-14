@@ -66,9 +66,9 @@ export function Lockup({
   className?: string;
 }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <Logo color={color} onDark={onDark} className="h-7 w-auto" />
-      <span className="text-[0.95rem] font-extrabold tracking-[-0.02em] leading-none">
+    <span className={`inline-flex items-center gap-3 sm:gap-3.5 ${className}`}>
+      <Logo color={color} onDark={onDark} className="h-10 w-auto sm:h-12" />
+      <span className="text-[1.15rem] font-extrabold leading-none tracking-[-0.025em] sm:text-[1.4rem]">
         Ezers <span className="font-medium opacity-60">&</span> Strategies
       </span>
     </span>
