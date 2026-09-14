@@ -9,8 +9,8 @@ import {
   useSpring,
   useTransform,
   useVelocity,
-  useReducedMotion,
 } from "motion/react";
+import { useCalmMotion } from "@/lib/useCalmMotion";
 
 type MarqueeProps = {
   children: ReactNode;
@@ -24,7 +24,7 @@ type MarqueeProps = {
  * lean into the direction the page is moving.
  */
 export function Marquee({ children, speed = 40, className }: MarqueeProps) {
-  const reduced = useReducedMotion();
+  const calm = useCalmMotion();
   const x = useMotionValue(0);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +39,7 @@ export function Marquee({ children, speed = 40, className }: MarqueeProps) {
   });
 
   useAnimationFrame((_, delta) => {
-    if (reduced) return;
+    if (calm) return;
     const track = trackRef.current;
     if (!track) return;
 
@@ -59,7 +59,7 @@ export function Marquee({ children, speed = 40, className }: MarqueeProps) {
     <div className={`overflow-hidden ${className ?? ""}`}>
       <motion.div
         ref={trackRef}
-        style={reduced ? undefined : { x }}
+        style={calm ? undefined : { x }}
         className="flex w-max will-change-transform"
         aria-hidden={false}
       >

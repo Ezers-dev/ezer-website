@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { useCalmMotion } from "@/lib/useCalmMotion";
 import { Reveal, FadeUp } from "@/components/motion/Reveal";
 import { site } from "@/data/site";
 
 export function Story() {
-  const reduced = useReducedMotion();
+  const calm = useCalmMotion();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -65,24 +66,23 @@ export function Story() {
       {/* By the numbers, set large enough to be a graphic rather than a stat row. */}
       <div ref={ref} className="mt-16 overflow-hidden sm:mt-24">
         <motion.dl
-          style={reduced ? undefined : { x }}
+          style={calm ? undefined : { x }}
           className="flex w-max items-end gap-10 px-5 sm:gap-20 sm:px-8 lg:px-12"
         >
           {site.stats.map((stat, index) => (
-            <div key={stat.label} className="flex items-end gap-4 sm:gap-7">
+            <div key={stat.label} className="flex items-end gap-6 sm:gap-12">
               <div>
-                <dt className="sr-only">{stat.label}</dt>
-                <dd className="text-[clamp(4.5rem,15vw,13rem)] font-extrabold leading-[0.8] tracking-[-0.05em]">
+                <dt className="max-w-[16ch] text-label uppercase text-ink-soft">
+                  {stat.label}
+                </dt>
+                <dd className="mt-3 text-[clamp(4.5rem,15vw,13rem)] font-extrabold leading-[0.78] tracking-[-0.05em]">
                   {stat.value}
                 </dd>
               </div>
-              <p className="mb-2 max-w-[11ch] text-label uppercase text-ink-soft sm:mb-4">
-                {stat.label}
-              </p>
               {index < site.stats.length - 1 && (
                 <span
                   aria-hidden
-                  className="pill mb-4 hidden h-3 w-3 bg-blue sm:block"
+                  className="pill mb-5 hidden h-3 w-3 shrink-0 bg-blue sm:block"
                 />
               )}
             </div>

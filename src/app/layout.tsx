@@ -5,6 +5,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Cursor } from "@/components/Cursor";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { MotionProvider } from "@/components/MotionProvider";
 import { site } from "@/data/site";
 
 const montserrat = Montserrat({
@@ -46,19 +47,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${montserrat.variable} antialiased`}>
       <body className="flex min-h-svh flex-col">
-        <SmoothScroll />
-        <Cursor />
-        <a
-          href="#main"
-          className="pill sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:bg-ink focus:px-5 focus:py-3 focus:text-paper"
-        >
-          Skip to content
-        </a>
-        <Nav />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <MotionProvider>
+          <SmoothScroll />
+          <Cursor />
+          <a
+            href="#main"
+            className="pill sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:bg-ink focus:px-5 focus:py-3 focus:text-paper"
+          >
+            Skip to content
+          </a>
+          <Nav />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

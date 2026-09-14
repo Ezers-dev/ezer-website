@@ -3,14 +3,10 @@
 import { easeOutExpo } from "@/lib/motion";
 
 import { useRef, useState } from "react";
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useReducedMotion,
-} from "motion/react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useCalmMotion } from "@/lib/useCalmMotion";
 import { services } from "@/data/services";
-import { brandBg, onBrandText } from "@/lib/colors";
+import { brandBg, onBrand, onBrandText } from "@/lib/colors";
 
 /**
  * The section pins while four discipline panels swap through it, each owning a
@@ -18,7 +14,7 @@ import { brandBg, onBrandText } from "@/lib/colors";
  * stack and scroll — same content, no pinning.
  */
 export function Services() {
-  const reduced = useReducedMotion();
+  const calm = useCalmMotion();
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
@@ -35,7 +31,7 @@ export function Services() {
     setActive(next);
   });
 
-  if (reduced) return <ServicesStacked />;
+  if (calm) return <ServicesStacked />;
 
   const current = services[active];
 
@@ -50,9 +46,10 @@ export function Services() {
         style={{ height: `${services.length * 100}svh` }}
       >
         <div
+          data-nav-theme={onBrand[current.color]}
           className={`sticky top-0 flex h-[100svh] flex-col overflow-hidden transition-colors duration-[900ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${brandBg[current.color]} ${onBrandText[current.color]}`}
         >
-          <div className="mx-auto flex w-full max-w-[1560px] flex-1 flex-col px-5 pb-10 pt-28 sm:px-8 lg:px-12">
+          <div className="relative mx-auto flex w-full max-w-[1560px] flex-1 flex-col px-5 pb-10 pt-28 sm:px-8 lg:px-12">
             <div className="flex items-baseline justify-between border-b border-current/25 pb-4">
               <p className="text-label uppercase opacity-70">What We Do</p>
               <p className="max-w-[44ch] text-right text-[0.85rem] leading-relaxed opacity-80">
@@ -60,6 +57,18 @@ export function Services() {
                 clarity and consistency, everywhere it matters.
               </p>
             </div>
+
+            {/* Oversized index, ghosted into the right half of the panel. */}
+            <motion.span
+              key={current.index}
+              aria-hidden
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 0.14, y: 0 }}
+              transition={{ duration: 1.1, ease: easeOutExpo }}
+              className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-[34vh] font-extrabold leading-none tracking-[-0.06em] sm:right-8 lg:right-12"
+            >
+              {current.index}
+            </motion.span>
 
             <div className="relative flex flex-1 items-center">
               {services.map((service, index) => (
@@ -134,6 +143,7 @@ function ServicesStacked() {
       {services.map((service) => (
         <article
           key={service.title}
+          data-nav-theme={onBrand[service.color]}
           className={`px-5 py-14 sm:px-8 lg:px-12 ${brandBg[service.color]} ${onBrandText[service.color]}`}
         >
           <div className="mx-auto max-w-[1560px]">

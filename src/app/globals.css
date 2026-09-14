@@ -16,7 +16,8 @@
   --font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
 
   /* Display scale. Tight tracking, near-solid leading at the top end. */
-  --text-mega: clamp(3.25rem, 13vw, 13rem);
+  /* Capped so the longest hero word still clears the offset lede column. */
+  --text-mega: clamp(3.25rem, 10.2vw, 11rem);
   --text-mega--line-height: 0.86;
   --text-mega--letter-spacing: -0.045em;
   --text-mega--font-weight: 800;

@@ -60,11 +60,11 @@ export function Clients({ items }: { items: ClientItem[] }) {
 
       <div className="mx-auto mt-12 max-w-[1560px] px-5 sm:px-8 lg:px-12">
         <p className="text-headline max-w-[26ch]">
-          <Reveal as="span">
+          <Reveal>
             <span className="text-blue">150+</span>
             <span className="text-ink"> startups and individual brands,</span>
           </Reveal>
-          <Reveal as="span" delay={1}>
+          <Reveal delay={1}>
             <span className="text-ink-soft">
               partnered with to build their first &mdash; or next &mdash; visual
               identity.

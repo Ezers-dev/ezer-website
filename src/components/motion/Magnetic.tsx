@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { useCalmMotion } from "@/lib/useCalmMotion";
 
 /**
  * Pulls its child toward the pointer while hovered. Pointer-driven only —
@@ -16,12 +17,12 @@ export function Magnetic({
   strength?: number;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
+  const calm = useCalmMotion();
   const ref = useRef<HTMLSpanElement>(null);
   const x = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
   const y = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
 
-  if (reduced) return <span className={className}>{children}</span>;
+  if (calm) return <span className={className}>{children}</span>;
 
   const handleMove = (event: React.PointerEvent<HTMLSpanElement>) => {
     if (event.pointerType !== "mouse") return;

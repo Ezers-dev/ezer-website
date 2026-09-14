@@ -5,7 +5,7 @@ import { easeOutExpo } from "@/lib/motion";
 import Link from "next/link";
 import { Media } from "@/components/Media";
 import { Reveal } from "@/components/motion/Reveal";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import type { Project } from "@/data/work";
 
 export type WorkItem = Project & { ready: boolean };
@@ -18,16 +18,15 @@ const aspect = {
 
 /** Deliberate offsets so the grid never reads as a uniform card wall. */
 const layout = [
-  "md:col-span-7",
-  "md:col-span-5 md:mt-24",
   "md:col-span-5",
-  "md:col-span-6 md:col-start-7 md:-mt-16",
-  "md:col-span-6 md:mt-10",
-  "md:col-span-5 md:col-start-8 md:mt-4",
+  "md:col-span-6 md:col-start-7 md:mt-28",
+  "md:col-span-6 md:-mt-8",
+  "md:col-span-5 md:col-start-8 md:mt-16",
+  "md:col-span-7 md:mt-4",
+  "md:col-span-4 md:col-start-9 md:mt-20",
 ];
 
 export function Work({ items }: { items: WorkItem[] }) {
-  const reduced = useReducedMotion();
 
   return (
     <section id="work" className="scroll-mt-24 bg-paper py-20 sm:py-28">
@@ -50,7 +49,7 @@ export function Work({ items }: { items: WorkItem[] }) {
                 className="group block"
               >
                 <motion.div
-                  initial={reduced ? false : { opacity: 0, y: 40 }}
+                  initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-12% 0px" }}
                   transition={{ duration: 0.9, ease: easeOutExpo }}
@@ -62,7 +61,7 @@ export function Work({ items }: { items: WorkItem[] }) {
                       alt={`${project.client} — ${project.title}`}
                       ready={project.ready}
                       color={project.color}
-                      label={project.client}
+                      label={project.sector}
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>

@@ -62,7 +62,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="scroll-mt-0 bg-blue text-paper">
+    <section
+      id="contact"
+      data-nav-theme="paper"
+      className="scroll-mt-0 bg-blue text-paper"
+    >
       <div className="mx-auto max-w-[1560px] px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
         <div className="text-display max-w-[16ch]">
           <Reveal>Start a</Reveal>

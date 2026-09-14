@@ -4,7 +4,8 @@ import { easeOutExpo } from "@/lib/motion";
 
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { useCalmMotion } from "@/lib/useCalmMotion";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { site } from "@/data/site";
 
@@ -17,7 +18,7 @@ const line = {
 };
 
 export function Hero() {
-  const reduced = useReducedMotion();
+  const calm = useCalmMotion();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -31,8 +32,28 @@ export function Hero() {
       ref={ref}
       className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden pb-10 pt-32 sm:pb-14"
     >
+      {/* Studio meta, hung high so the hero reads as a masthead. */}
+      <motion.dl
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.75 }}
+        className="mx-auto mb-auto grid w-full max-w-[1560px] grid-cols-2 gap-6 px-5 text-[0.78rem] sm:px-8 md:grid-cols-4 lg:px-12"
+      >
+        {[
+          ["Est.", String(site.founded)],
+          ["Studios", "Lagos · Toronto"],
+          ["Clients", "160+ and counting"],
+          ["Disciplines", "Brand · Digital · Strategy · Content"],
+        ].map(([term, value]) => (
+          <div key={term}>
+            <dt className="text-label uppercase text-ink-soft">{term}</dt>
+            <dd className="mt-1.5 font-semibold tracking-[-0.01em]">{value}</dd>
+          </div>
+        ))}
+      </motion.dl>
+
       <motion.div
-        style={reduced ? undefined : { y, opacity }}
+        style={calm ? undefined : { y, opacity }}
         className="mx-auto w-full max-w-[1560px] px-5 sm:px-8 lg:px-12"
       >
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
@@ -42,7 +63,7 @@ export function Hero() {
                 <motion.span
                   variants={line}
                   custom={0}
-                  initial={reduced ? false : "hidden"}
+                  initial="hidden"
                   animate="show"
                   className="block"
                 >
@@ -54,7 +75,7 @@ export function Hero() {
                 <motion.span
                   variants={line}
                   custom={1}
-                  initial={reduced ? false : "hidden"}
+                  initial="hidden"
                   animate="show"
                   className="block"
                 >
@@ -67,13 +88,13 @@ export function Hero() {
               <motion.span
                 variants={line}
                 custom={2}
-                initial={reduced ? false : "hidden"}
+                initial="hidden"
                 animate="show"
                 className="flex items-center gap-3 text-[clamp(1.1rem,2.6vw,2rem)] font-medium tracking-[-0.02em] text-ink-soft"
               >
                 <motion.span
                   aria-hidden
-                  animate={reduced ? undefined : { scale: [1, 1.35, 1] }}
+                  animate={{ scale: [1, 1.35, 1] }}
                   transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
                   className="pill inline-block h-[0.42em] w-[0.42em] shrink-0 bg-yellow"
                 />
@@ -83,7 +104,7 @@ export function Hero() {
           </div>
 
           <motion.div
-            initial={reduced ? false : { opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6, ease: easeOutExpo }}
             className="lg:col-span-4 lg:pb-3"
@@ -115,7 +136,7 @@ export function Hero() {
       </motion.div>
 
       <motion.p
-        initial={reduced ? false : { opacity: 0 }}
+        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.1 }}
         className="mx-auto mt-12 w-full max-w-[1560px] border-t border-ink/12 px-5 pt-5 text-[0.82rem] leading-relaxed text-ink-soft sm:px-8 lg:px-12"
