@@ -47,11 +47,7 @@ export function Work({ items }: { items: WorkItem[] }) {
             const slot = slots[index % slots.length];
             return (
               <li key={project.slug} className={slot.cell}>
-                <Link
-                  href={`/work/${project.slug}`}
-                  data-cursor-label="View case"
-                  className="group block"
-                >
+                <Link href={`/work/${project.slug}`} className="group block">
                   <motion.div
                     initial={{ opacity: 0, y: 36 }}
                     whileInView={{ opacity: 1, y: 0 }}

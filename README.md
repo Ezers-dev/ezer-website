@@ -59,7 +59,7 @@ during hydration so the first client paint matches the server HTML. Do not call
 `useReducedMotion()` directly during render; that is what caused a hydration
 mismatch previously.
 
-With motion reduced, the site drops smooth scroll, the custom cursor, the
+With motion reduced, the site drops smooth scroll, the
 section pinning and all scroll-linked transforms, and reads as a plain
 scrolling page.
 
