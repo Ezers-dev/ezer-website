@@ -1,137 +1,120 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { easeOutExpo } from "@/lib/motion";
+import { useCalmMotion } from "@/lib/useCalmMotion";
 import { Magnetic } from "@/components/motion/Magnetic";
+import { MorphBlob } from "@/components/motion/MorphBlob";
 import { site } from "@/data/site";
 
-const rise = (i: number) => ({
-  initial: { opacity: 0, y: 26 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 1, delay: 0.35 + i * 0.12, ease: easeOutExpo },
-});
+const headline = "Look, sound, and move like the market leaders you’re becoming.";
+const words = headline.split(" ");
 
-/**
- * Centred masthead: a dome with a thin blue arc rising out of a field of
- * dots that ripple like a wave, the statement stacked inside it.
- */
 export function Hero() {
+  const calm = useCalmMotion();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+
   return (
-    <section className="relative flex min-h-[100svh] flex-col items-center overflow-hidden bg-paper pt-32 sm:pt-36">
-      <DotField />
-
-      {/* The dome. Its lower half fades out so it reads as an arc, not a ball. */}
-      <motion.div
+    <section
+      ref={ref}
+      // isolate: the blob's z-0 and the content's z-10 resolve against each
+      // other here, never against the fixed nav.
+      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden pb-8 pt-28 sm:pb-10 sm:pt-36"
+    >
+      {/* Background shape. Sits behind the headline block, carries no content,
+          and passes every pointer event through to what's above it. */}
+      <div
         aria-hidden
-        initial={{ opacity: 0, scale: 0.94, y: 40 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1.6, ease: easeOutExpo }}
-        className="pointer-events-none absolute left-1/2 top-[7.5rem] aspect-square w-[175vw] -translate-x-1/2 rounded-full border-2 border-blue bg-white sm:top-[8rem] sm:w-[120vw] lg:w-[min(88vw,1280px)] [mask-image:linear-gradient(to_bottom,black_30%,transparent_50%)] sm:[mask-image:linear-gradient(to_bottom,black_38%,transparent_62%)]"
-      />
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-[0.16]"
+      >
+        <MorphBlob className="w-[165vw] max-w-none translate-x-[6%] -translate-y-[25%] text-blue blur-[14px] sm:w-[110vw] sm:-translate-x-[10%] sm:translate-y-[-1%] lg:w-[min(78vw,1080px)] lg:-translate-x-[14%] lg:translate-y-[1%]" />
+      </div>
 
-      <div className="relative z-10 flex w-full max-w-[1560px] flex-col items-center px-5 pt-[7vh] text-center sm:px-8 sm:pt-[10vh] lg:px-12">
-        <motion.h1
-          {...rise(0)}
-          className="text-[clamp(2.6rem,7.4vw,6.4rem)] font-extrabold leading-[0.96] tracking-[-0.04em]"
-        >
-          Thoughts turn
-          <br />
-          <span className="text-blue">reality.</span>
-        </motion.h1>
-
+      <motion.div
+        style={calm ? undefined : { y, opacity }}
+        className="relative z-10 mx-auto my-auto w-full max-w-[1560px] px-5 py-10 sm:px-8 lg:px-12"
+      >
         <motion.p
-          {...rise(1)}
-          className="mt-7 max-w-[46ch] text-[clamp(1rem,1.5vw,1.25rem)] leading-[1.55] text-ink-soft"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="flex items-center gap-2.5 text-label uppercase text-ink-soft"
         >
-          We are a creative agency helping ambitious brands look, sound, and
-          move like the market leaders they&rsquo;re becoming.
+          <span aria-hidden className="pill inline-block h-2 w-2 bg-yellow" />
+          {site.tagline}
         </motion.p>
 
+        {/* Word-by-word mask reveal. Each word's clip box is padded above and
+            below, then pulled back by the same amount, so ascenders and
+            descenders aren't cut and the line spacing is unchanged. */}
+        <h1 className="mt-6 max-w-[17ch] text-[clamp(2.4rem,6.4vw,6.25rem)] font-extrabold leading-[0.98] tracking-[-0.04em] sm:mt-8">
+          {words.map((word, i) => (
+            <span key={i}>
+              <span className="-my-[0.2em] inline-block overflow-hidden py-[0.2em] align-top">
+                <motion.span
+                  initial={{ y: "110%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ duration: 1.05, delay: 0.2 + i * 0.055, ease: easeOutExpo }}
+                  className={`inline-block ${i === words.length - 1 ? "text-blue" : ""}`}
+                >
+                  {word}
+                </motion.span>
+              </span>
+              {i < words.length - 1 && " "}
+            </span>
+          ))}
+        </h1>
+
         <motion.div
-          {...rise(2)}
-          className="pill mt-10 flex w-full max-w-[26rem] flex-col gap-1.5 border border-ink/15 bg-paper p-1.5 sm:w-auto sm:max-w-none sm:flex-row"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.85, ease: easeOutExpo }}
+          className="mt-10 flex flex-col gap-7 sm:mt-12 md:flex-row md:items-center md:justify-between md:gap-10"
         >
-          <Magnetic>
-            <Link
-              href="/#contact"
-              className="pill flex w-full items-center justify-center gap-2 bg-blue-deep px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors duration-300 hover:bg-ink sm:w-auto"
-            >
-              Start a Project <span aria-hidden>→</span>
-            </Link>
-          </Magnetic>
-          <Magnetic>
-            <Link
-              href="/#work"
-              className="pill flex w-full items-center justify-center gap-2 px-6 py-3.5 text-[0.9rem] font-semibold transition-colors duration-300 hover:bg-ink hover:text-paper sm:w-auto"
-            >
-              See Our Work <span aria-hidden>→</span>
-            </Link>
-          </Magnetic>
+          <p className="max-w-[44ch] text-[clamp(1.05rem,1.5vw,1.3rem)] font-medium leading-[1.5] text-ink-soft">
+            A creative agency for ambitious brands &mdash; branding, digital,
+            creative strategy and content, from Nigeria and Canada.
+          </p>
+          <div className="flex shrink-0 flex-wrap items-center gap-3">
+            <Magnetic>
+              <Link
+                href="/#contact"
+                className="pill inline-flex items-center gap-2 bg-blue-deep px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors duration-300 hover:bg-ink"
+              >
+                Start a Project <span aria-hidden>→</span>
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <Link
+                href="/#work"
+                className="pill inline-flex items-center gap-2 border border-ink/25 bg-paper/60 px-6 py-3.5 text-[0.9rem] font-semibold backdrop-blur-sm transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-paper"
+              >
+                See Our Work <span aria-hidden>→</span>
+              </Link>
+            </Magnetic>
+          </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.1 }}
-        className="relative z-10 mx-auto mb-12 mt-auto max-w-[62ch] px-5 pt-[14vh] text-center text-[0.9rem] leading-relaxed text-ink-soft sm:px-8"
+        className="relative z-10 mx-auto w-full max-w-[1560px] border-t border-ink/12 px-5 pt-5 text-[0.82rem] leading-relaxed text-ink-soft sm:px-8 lg:px-12"
       >
         Since {site.founded}, we&rsquo;ve partnered with 160+ brands across
         Africa, Europe and North America &mdash; from early-stage start-ups to
-        multinational institutions.
+        multinational institutions &mdash; building the branding, digital
+        presence, and creative content that turns strategy into visibility.
       </motion.p>
     </section>
-  );
-}
-
-/**
- * Rows of dots whose vertical position follows a sine wave, fading toward
- * the edges and toward the dome. Built deterministically so the server
- * and client draw the same field.
- */
-function DotField() {
-  const cols = 96;
-  const rows = 22;
-  const width = 1600;
-  const height = 560;
-  const dx = width / cols;
-  const dy = height / rows;
-
-  const dots: { x: number; y: number; o: number }[] = [];
-  for (let c = 0; c <= cols; c++) {
-    for (let r = 0; r <= rows; r++) {
-      const x = c * dx;
-      const wave = Math.sin((c / cols) * Math.PI * 3 + r * 0.42) * 26;
-      const y = r * dy + wave;
-      const edge = 1 - Math.abs(c / cols - 0.5) * 1.5;
-      const depth = 1 - r / rows;
-      const o = Math.max(0, Math.min(1, edge)) * (0.15 + depth * 0.85);
-      // Rounded so the server and client serialise identical attributes.
-      dots.push({ x: +x.toFixed(1), y: +y.toFixed(1), o: +o.toFixed(3) });
-    }
-  }
-
-  return (
-    <motion.svg
-      aria-hidden
-      viewBox={`0 0 ${width} ${height}`}
-      preserveAspectRatio="xMidYMin slice"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.8, delay: 0.2 }}
-      className="pointer-events-none absolute inset-x-0 top-0 h-[60svh] w-full text-blue"
-    >
-      {dots.map((d, i) => (
-        <circle
-          key={i}
-          cx={d.x}
-          cy={d.y}
-          r={2.4}
-          fill="currentColor"
-          opacity={+(d.o * 0.5).toFixed(3)}
-        />
-      ))}
-    </motion.svg>
   );
 }
