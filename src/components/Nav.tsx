@@ -67,7 +67,7 @@ export function Nav() {
       >
         <div
           ref={barRef}
-          className="mx-auto flex max-w-[1560px] items-center justify-between px-5 py-5 sm:px-8 sm:py-7 lg:px-12"
+          className="mx-auto flex max-w-[1560px] items-center justify-between px-5 py-3.5 sm:px-8 sm:py-4.5 lg:px-12"
         >
           <Link href="/" aria-label="Ezers & Strategies — home" className="relative z-10">
             <Lockup color="blue" onDark={light} />
@@ -78,7 +78,7 @@ export function Nav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative flex items-center py-1.5 text-[0.9rem] font-semibold tracking-[-0.01em]"
+                className="group relative flex items-center py-1.5 text-[0.85rem] font-semibold tracking-[-0.01em]"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-current transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
