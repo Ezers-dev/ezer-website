@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { BrandColor } from "@/lib/colors";
-import { brandBg, onBrandText } from "@/lib/colors";
+import { panelBg, onBrandText } from "@/lib/colors";
 
 type MediaProps = {
   src: string;
@@ -47,9 +47,9 @@ export function Media({
     <div
       role="img"
       aria-label={alt}
-      className={`flex h-full w-full flex-col justify-between p-5 sm:p-7 ${brandBg[color]} ${onBrandText[color]} ${className ?? ""}`}
+      className={`flex h-full w-full flex-col justify-between p-5 sm:p-7 ${panelBg[color]} ${onBrandText[color]} ${className ?? ""}`}
     >
-      <span className="text-label uppercase opacity-70">Image pending</span>
+      <span className="text-label uppercase">Image pending</span>
       <span className="max-w-[14ch] text-[clamp(1.35rem,2.4vw,2.25rem)] font-extrabold leading-[0.98] tracking-[-0.03em]">
         {label}
       </span>

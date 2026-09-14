@@ -23,15 +23,6 @@ export const onBrand: Record<BrandColor, "paper" | "ink"> = {
   ink: "paper",
 };
 
-export const brandBg: Record<BrandColor, string> = {
-  blue: "bg-blue",
-  pink: "bg-pink",
-  green: "bg-green",
-  orange: "bg-orange",
-  yellow: "bg-yellow",
-  ink: "bg-ink",
-};
-
 export const brandText: Record<BrandColor, string> = {
   blue: "text-blue",
   pink: "text-pink",
@@ -48,4 +39,18 @@ export const onBrandText: Record<BrandColor, string> = {
   orange: "text-ink",
   yellow: "text-ink",
   ink: "text-paper",
+};
+
+/**
+ * Background classes for full-bleed panels. Blue and pink are deepened here
+ * so white body text on them clears WCAG AA; the mark keeps the true brand
+ * values above. Green, orange and yellow take ink text and need no change.
+ */
+export const panelBg: Record<BrandColor, string> = {
+  blue: "bg-blue-deep",
+  pink: "bg-pink-deep",
+  green: "bg-green",
+  orange: "bg-orange",
+  yellow: "bg-yellow",
+  ink: "bg-ink",
 };

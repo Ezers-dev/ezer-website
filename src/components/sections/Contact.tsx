@@ -65,7 +65,7 @@ export function Contact() {
     <section
       id="contact"
       data-nav-theme="paper"
-      className="scroll-mt-0 bg-blue text-paper"
+      className="scroll-mt-0 bg-blue-deep text-paper"
     >
       <div className="mx-auto max-w-[1560px] px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
         <div className="text-display max-w-[16ch]">
@@ -82,13 +82,13 @@ export function Contact() {
 
             <dl className="mt-10 space-y-6 border-t border-paper/25 pt-8">
               <div>
-                <dt className="text-label uppercase text-paper/55">Call us</dt>
+                <dt className="text-label uppercase text-paper">Call us</dt>
                 <dd className="mt-2 space-y-1">
                   {site.phones.map((phone) => (
                     <a
                       key={phone.href}
                       href={phone.href}
-                      className="block text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold tracking-[-0.03em] underline decoration-paper/30 decoration-2 underline-offset-[6px] transition-colors hover:decoration-paper"
+                      className="block text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold tracking-[-0.03em] underline decoration-paper/60 decoration-2 underline-offset-[6px] transition-colors hover:decoration-paper"
                     >
                       {phone.number}
                     </a>
@@ -96,26 +96,26 @@ export function Contact() {
                 </dd>
               </div>
               <div>
-                <dt className="text-label uppercase text-paper/55">Email us</dt>
+                <dt className="text-label uppercase text-paper">Email us</dt>
                 <dd className="mt-2">
                   <a
                     href={`mailto:${site.email}`}
-                    className="break-all text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold tracking-[-0.03em] underline decoration-paper/30 decoration-2 underline-offset-[6px] transition-colors hover:decoration-paper"
+                    className="break-all text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold tracking-[-0.03em] underline decoration-paper/60 decoration-2 underline-offset-[6px] transition-colors hover:decoration-paper"
                   >
                     {site.email}
                   </a>
                 </dd>
               </div>
               <div>
-                <dt className="text-label uppercase text-paper/55">
+                <dt className="text-label uppercase text-paper">
                   We operate in
                 </dt>
-                <dd className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-[0.95rem] font-medium text-paper/85">
+                <dd className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-[0.95rem] font-medium">
                   {site.locations.map((location) => (
                     <span key={location.country} className="flex items-center gap-2">
                       <span className="pill h-1.5 w-1.5 bg-yellow" />
                       {location.country}
-                      <span className="text-paper/55">
+                      <span className="text-paper">
                         <LocalTime
                           timeZone={location.timeZone}
                           city={location.city}
@@ -139,7 +139,7 @@ export function Contact() {
 
           <div className="lg:col-span-6 lg:col-start-7">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <h3 className="text-label uppercase text-paper/55">
+              <h3 className="text-label uppercase text-paper">
                 Send a Message
               </h3>
 
@@ -156,7 +156,7 @@ export function Contact() {
               <div>
                 <label
                   htmlFor="message"
-                  className="text-label uppercase text-paper/55"
+                  className="text-label uppercase text-paper"
                 >
                   What are you working on?
                 </label>
@@ -165,7 +165,7 @@ export function Contact() {
                   name="message"
                   rows={4}
                   required
-                  className="mt-2 w-full resize-none border-b border-paper/30 bg-transparent pb-2 text-[1.05rem] font-medium placeholder:text-paper/40 focus:border-paper focus:outline-none"
+                  className="mt-2 w-full resize-none border-b border-paper/55 bg-transparent pb-2 text-[1.05rem] font-medium placeholder:text-paper/75 focus:border-paper focus:outline-none"
                   placeholder="A launch, a rebrand, a campaign…"
                 />
               </div>
@@ -179,7 +179,7 @@ export function Contact() {
                 <span aria-hidden>→</span>
               </button>
 
-              <p aria-live="polite" className="text-[0.9rem] text-paper/85">
+              <p aria-live="polite" className="text-[0.9rem]">
                 {status === "sent" &&
                   "Thank you — your message is in. We reply within two business days."}
                 {status === "error" && error}
@@ -207,7 +207,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="text-label uppercase text-paper/55">
+      <label htmlFor={name} className="text-label uppercase text-paper">
         {label}
       </label>
       <input
@@ -216,7 +216,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className="mt-2 w-full border-b border-paper/30 bg-transparent pb-2 text-[1.05rem] font-medium placeholder:text-paper/40 focus:border-paper focus:outline-none"
+        className="mt-2 w-full border-b border-paper/55 bg-transparent pb-2 text-[1.05rem] font-medium placeholder:text-paper/75 focus:border-paper focus:outline-none"
       />
     </div>
   );

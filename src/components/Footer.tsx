@@ -16,13 +16,13 @@ export function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <h2 className="text-label uppercase text-paper/45">Navigate</h2>
+            <h2 className="text-label uppercase text-paper/70">Navigate</h2>
             <ul className="mt-5 space-y-2.5">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-[0.95rem] font-medium text-paper/85 transition-colors hover:text-blue"
+                    className="inline-flex min-h-6 items-center text-[0.95rem] font-medium text-paper/85 transition-colors hover:text-blue"
                   >
                     {item.label}
                   </Link>
@@ -32,23 +32,23 @@ export function Footer() {
           </div>
 
           <div className="md:col-span-4">
-            <h2 className="text-label uppercase text-paper/45">Get in touch</h2>
+            <h2 className="text-label uppercase text-paper/70">Get in touch</h2>
             <ul className="mt-5 space-y-2.5">
               {site.phones.map((phone) => (
                 <li key={phone.href}>
                   <a
                     href={phone.href}
-                    className="text-[0.95rem] font-medium text-paper/85 transition-colors hover:text-blue"
+                    className="inline-flex min-h-6 items-center text-[0.95rem] font-medium text-paper/85 transition-colors hover:text-blue"
                   >
                     {phone.number}
-                    <span className="ml-2 text-paper/40">{phone.label}</span>
+                    <span className="ml-2 text-paper/70">{phone.label}</span>
                   </a>
                 </li>
               ))}
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="text-[0.95rem] font-medium text-paper/85 transition-colors hover:text-blue"
+                  className="inline-flex min-h-6 items-center text-[0.95rem] font-medium text-paper/85 transition-colors hover:text-blue"
                 >
                   {site.email}
                 </a>
@@ -57,7 +57,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 pt-6 text-[0.78rem] text-paper/45 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 pt-6 text-[0.78rem] text-paper/70 sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>

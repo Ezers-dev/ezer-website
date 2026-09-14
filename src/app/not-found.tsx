@@ -9,7 +9,7 @@ export default function NotFound() {
       </h1>
       <Link
         href="/"
-        className="pill mt-8 inline-flex w-fit items-center gap-2 bg-blue px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors hover:bg-ink"
+        className="pill mt-8 inline-flex w-fit items-center gap-2 bg-blue-deep px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors hover:bg-ink"
       >
         Back home <span aria-hidden>→</span>
       </Link>

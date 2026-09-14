@@ -82,7 +82,7 @@ export function Nav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative text-[0.82rem] font-semibold tracking-[-0.01em]"
+                className="group relative flex items-center py-1.5 text-[0.82rem] font-semibold tracking-[-0.01em]"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-current transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
@@ -96,7 +96,7 @@ export function Nav() {
                     ? light
                       ? "bg-paper text-ink hover:bg-ink hover:text-paper"
                       : "bg-ink text-paper hover:bg-paper hover:text-ink"
-                    : "bg-blue text-paper hover:bg-ink"
+                    : "bg-blue-deep text-paper hover:bg-ink"
                 }`}
               >
                 Start a Project
@@ -110,7 +110,7 @@ export function Nav() {
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="relative z-10 flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden"
+            className="relative z-10 -mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[5px] md:hidden"
           >
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
             <span
@@ -134,7 +134,7 @@ export function Nav() {
             animate={{ y: "0%" }}
             exit={{ y: "-100%" }}
             transition={{ duration: 0.6, ease: easeInOutQuart }}
-            className="fixed inset-0 z-40 flex flex-col justify-end bg-blue px-5 pb-16 pt-28 text-paper md:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-end bg-blue-deep px-5 pb-16 pt-28 text-paper md:hidden"
           >
             <nav aria-label="Mobile" className="flex flex-col gap-2">
               {nav.map((item) => (

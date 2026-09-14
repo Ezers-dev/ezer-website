@@ -20,7 +20,7 @@ function ClientLogo({ client }: { client: ClientItem }) {
           className="h-9 w-auto object-contain opacity-70 transition-opacity duration-500 hover:opacity-100"
         />
       ) : (
-        <span className="whitespace-nowrap text-[clamp(1.1rem,2vw,1.8rem)] font-extrabold tracking-[-0.03em] text-ink/35 transition-colors duration-500 hover:text-ink">
+        <span className="whitespace-nowrap text-[clamp(1.1rem,2vw,1.8rem)] font-extrabold tracking-[-0.03em] text-ink/60 transition-colors duration-500 hover:text-ink">
           {client.name}
         </span>
       )}

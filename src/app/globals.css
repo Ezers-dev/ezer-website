@@ -3,8 +3,11 @@
 @theme {
   /* Brand palette, sampled from the logo marks. Blue leads. */
   --color-blue: #0080c8;
-  --color-blue-deep: #005e94;
   --color-pink: #ff0057;
+  /* Panel tints: the darkest blue and pink that still clear AA for white
+     body text, so full-bleed sections stay on-brand and readable. */
+  --color-blue-deep: #0071b0;
+  --color-pink-deep: #d6004a;
   --color-orange: #f96b2a;
   --color-green: #6ba23a;
   --color-yellow: #fbc400;

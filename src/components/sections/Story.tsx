@@ -69,22 +69,16 @@ export function Story() {
           style={calm ? undefined : { x }}
           className="flex w-max items-end gap-10 px-5 sm:gap-20 sm:px-8 lg:px-12"
         >
-          {site.stats.map((stat, index) => (
-            <div key={stat.label} className="flex items-end gap-6 sm:gap-12">
-              <div>
-                <dt className="max-w-[16ch] text-label uppercase text-ink-soft">
-                  {stat.label}
-                </dt>
-                <dd className="mt-3 text-[clamp(4.5rem,15vw,13rem)] font-extrabold leading-[0.78] tracking-[-0.05em]">
-                  {stat.value}
-                </dd>
-              </div>
-              {index < site.stats.length - 1 && (
-                <span
-                  aria-hidden
-                  className="pill mb-5 hidden h-3 w-3 shrink-0 bg-blue sm:block"
-                />
-              )}
+          {/* Each item is one div holding its own dt/dd, which is the only
+              grouping a definition list allows. */}
+          {site.stats.map((stat) => (
+            <div key={stat.label} className="shrink-0">
+              <dt className="max-w-[16ch] text-label uppercase text-ink-soft">
+                {stat.label}
+              </dt>
+              <dd className="mt-3 text-[clamp(4.5rem,15vw,13rem)] font-extrabold leading-[0.78] tracking-[-0.05em]">
+                {stat.value}
+              </dd>
             </div>
           ))}
         </motion.dl>

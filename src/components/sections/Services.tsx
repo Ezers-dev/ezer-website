@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useCalmMotion } from "@/lib/useCalmMotion";
 import { services } from "@/data/services";
-import { brandBg, onBrand, onBrandText } from "@/lib/colors";
+import { panelBg, onBrand, onBrandText } from "@/lib/colors";
 
 /**
  * The section pins while four discipline panels swap through it, each owning a
@@ -47,12 +47,12 @@ export function Services() {
       >
         <div
           data-nav-theme={onBrand[current.color]}
-          className={`sticky top-0 flex h-[100svh] flex-col overflow-hidden transition-colors duration-[900ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${brandBg[current.color]} ${onBrandText[current.color]}`}
+          className={`sticky top-0 flex h-[100svh] flex-col overflow-hidden transition-colors duration-[900ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${panelBg[current.color]} ${onBrandText[current.color]}`}
         >
           <div className="relative mx-auto flex w-full max-w-[1560px] flex-1 flex-col px-5 pb-10 pt-28 sm:px-8 lg:px-12">
             <div className="flex items-baseline justify-between border-b border-current/25 pb-4">
-              <p className="text-label uppercase opacity-70">What We Do</p>
-              <p className="max-w-[44ch] text-right text-[0.85rem] leading-relaxed opacity-80">
+              <p className="text-label uppercase">What We Do</p>
+              <p className="max-w-[44ch] text-right text-[0.85rem] leading-relaxed">
                 Four disciplines. One goal: making sure your brand shows up with
                 clarity and consistency, everywhere it matters.
               </p>
@@ -83,16 +83,16 @@ export function Services() {
                   className="absolute inset-0 flex flex-col justify-center"
                   style={{ pointerEvents: index === active ? "auto" : "none" }}
                 >
-                  <p className="text-label uppercase opacity-60">
+                  <p className="text-label uppercase">
                     {service.index} &mdash; {String(services.length).padStart(2, "0")}
                   </p>
                   <h3 className="mt-3 text-[clamp(3rem,9.5vw,9rem)] font-extrabold leading-[0.88] tracking-[-0.045em]">
                     {service.title}
                   </h3>
-                  <div className="mt-7 max-w-[54ch] space-y-3 text-[clamp(1rem,1.5vw,1.3rem)] leading-[1.5] opacity-90">
+                  <div className="mt-7 max-w-[54ch] space-y-3 text-[clamp(1rem,1.5vw,1.3rem)] leading-[1.5]">
                     <p className="font-semibold">{service.summary}</p>
                     {service.detail.map((paragraph) => (
-                      <p key={paragraph} className="font-normal opacity-85">
+                      <p key={paragraph} className="font-normal">
                         {paragraph}
                       </p>
                     ))}
@@ -105,8 +105,11 @@ export function Services() {
               {services.map((service, index) => (
                 <li
                   key={service.title}
-                  className={`flex items-center gap-2 text-[0.82rem] font-semibold transition-opacity duration-500 ${
-                    index === active ? "opacity-100" : "opacity-40"
+                  // Full contrast throughout; the dot and rule carry the state.
+                  className={`flex items-center gap-2 text-[0.82rem] font-semibold ${
+                    index === active
+                      ? "border-b-2 border-current pb-1"
+                      : "border-b-2 border-transparent pb-1"
                   }`}
                 >
                   <span
@@ -144,17 +147,17 @@ function ServicesStacked() {
         <article
           key={service.title}
           data-nav-theme={onBrand[service.color]}
-          className={`px-5 py-14 sm:px-8 lg:px-12 ${brandBg[service.color]} ${onBrandText[service.color]}`}
+          className={`px-5 py-14 sm:px-8 lg:px-12 ${panelBg[service.color]} ${onBrandText[service.color]}`}
         >
           <div className="mx-auto max-w-[1560px]">
-            <p className="text-label uppercase opacity-60">{service.index}</p>
+            <p className="text-label uppercase">{service.index}</p>
             <h3 className="mt-3 text-[clamp(2.5rem,11vw,4.5rem)] font-extrabold leading-[0.9] tracking-[-0.04em]">
               {service.title}
             </h3>
             <div className="mt-5 max-w-[52ch] space-y-3 text-[1.02rem] leading-[1.55]">
               <p className="font-semibold">{service.summary}</p>
               {service.detail.map((paragraph) => (
-                <p key={paragraph} className="opacity-85">
+                <p key={paragraph}>
                   {paragraph}
                 </p>
               ))}

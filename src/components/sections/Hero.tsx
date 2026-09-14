@@ -117,7 +117,7 @@ export function Hero() {
               <Magnetic>
                 <Link
                   href="/#contact"
-                  className="pill inline-flex items-center gap-2 bg-blue px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors duration-300 hover:bg-ink"
+                  className="pill inline-flex items-center gap-2 bg-blue-deep px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors duration-300 hover:bg-ink"
                 >
                   Start a Project <span aria-hidden>→</span>
                 </Link>
