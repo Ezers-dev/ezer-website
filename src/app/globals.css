@@ -110,3 +110,26 @@ html[data-cursor="on"] * {
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * Nav glass: a pale wash that runs through every brand colour, over a
+ * translucent paper base so it stays light and readable, with the blur
+ * doing the frosting. Tints are kept low enough that ink text clears AA.
+ */
+.nav-glass {
+  background:
+    linear-gradient(
+      100deg,
+      rgb(0 128 200 / 0.13) 0%,
+      rgb(255 0 87 / 0.09) 28%,
+      rgb(249 107 42 / 0.1) 50%,
+      rgb(251 196 0 / 0.13) 72%,
+      rgb(107 162 58 / 0.12) 100%
+    ),
+    rgb(246 245 242 / 0.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  backdrop-filter: blur(20px) saturate(1.3);
+  box-shadow:
+    inset 0 -1px 0 rgb(255 255 255 / 0.55),
+    0 1px 0 rgb(11 16 19 / 0.06);
+}

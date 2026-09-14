@@ -9,7 +9,6 @@ import { nav } from "@/data/site";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
-  const [lifted, setLifted] = useState(false);
   /**
    * Which text colour the panel under the bar needs. "default" means the
    * ordinary paper page, where the bar gets its own translucent backdrop.
@@ -22,8 +21,6 @@ export function Nav() {
 
     const read = () => {
       frame = 0;
-      setLifted(window.scrollY > 24);
-
       // Ask the document what sits directly behind the middle of the bar,
       // so the nav can invert over the coloured sections.
       const bar = barRef.current;
@@ -66,7 +63,7 @@ export function Nav() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
           light ? "text-paper" : "text-ink"
-        } ${lifted && !open && !onColor ? "bg-paper/80 backdrop-blur-md" : "bg-transparent"}`}
+        } ${!open && !onColor ? "nav-glass" : "bg-transparent"}`}
       >
         <div
           ref={barRef}
