@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ezers & Strategies
 
-## Getting Started
+Marketing site for Ezers & Strategies — a creative agency operating out of
+Nigeria and Canada since 2012.
 
-First, run the development server:
+Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Motion · Lenis
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # must pass clean; this is also the Vercel gate
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Adding real content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All copy and imagery lives in `src/data/` — no component edits needed.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| File | Holds |
+| --- | --- |
+| `src/data/site.ts` | Phone numbers, email, locations, headline stats, nav |
+| `src/data/work.ts` | Case studies (also generates `/work/[slug]` pages) |
+| `src/data/team.ts` | People |
+| `src/data/clients.ts` | Client list for the logo marquee |
+| `src/data/services.ts` | The four disciplines |
 
-## Learn More
+**Images.** Every item names an image path, e.g. `/work/kitchen-affairs.jpg`.
+Until a file exists at that path in `public/`, the site renders a flat brand
+colour field carrying the item's name — deliberate-looking, not broken. Drop
+the real file in at exactly that path and it takes over; `hasAsset()` in
+`src/lib/media.ts` resolves this on the server at build time.
 
-To learn more about Next.js, take a look at the following resources:
+Suggested aspect ratios: work `portrait` 4:5, `landscape` 16:10, `square` 1:1;
+team portraits 4:5. Client logos are optional — pass a `logo` path to use an
+image, or leave it out and the marquee typesets the name instead.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design system
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Tokens live in `src/app/globals.css` under `@theme`. The palette comes from the
+three logo variants, with blue leading.
 
-## Deploy on Vercel
+`--color-blue` and `--color-pink` are the true brand values, used for the mark
+and for accents on the paper background. `--color-blue-deep` and
+`--color-pink-deep` are slightly darkened panel tints — the deepest values that
+still clear WCAG AA for white body text — and are what full-bleed sections use.
+`src/lib/colors.ts` routes each case to the right one; `panelBg` is the map for
+any full-bleed panel. Green, orange and yellow panels take ink text.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The logo is drawn as inline SVG in `src/components/Logo.tsx` so it recolours per
+section; `onDark` flips disc and pills for use on a coloured panel.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Motion
+
+`MotionConfig reducedMotion="user"` in `src/components/MotionProvider.tsx`
+handles every enter animation. Anything that swaps markup or drives a frame loop
+— the pinned services sequence, the marquee, the magnetic buttons — uses
+`useCalmMotion()` (`src/lib/useCalmMotion.ts`) instead, which reports `false`
+during hydration so the first client paint matches the server HTML. Do not call
+`useReducedMotion()` directly during render; that is what caused a hydration
+mismatch previously.
+
+With motion reduced, the site drops smooth scroll, the custom cursor, the
+section pinning and all scroll-linked transforms, and reads as a plain
+scrolling page.
+
+## Contact form
+
+`src/app/api/contact/route.ts` validates the submission and logs it. Swap the
+`console.info` for a transactional email provider (Resend, Postmark) once one is
+chosen. The contact section also offers `mailto:` links, so nothing is dead in
+the meantime.
+
+## Deployment
+
+Vercel, standard Next.js build. Set the production domain in `site.url`
+(`src/data/site.ts`) — it feeds metadata, `sitemap.xml` and `robots.txt`.
