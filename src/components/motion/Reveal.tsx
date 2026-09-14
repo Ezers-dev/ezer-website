@@ -11,27 +11,37 @@ type RevealProps = {
   className?: string;
 };
 
+const mask = {
+  hidden: { y: "105%" },
+  show: { y: "0%" },
+};
+
 /**
  * Mask-based reveal: the child slides up out of a clipped box.
- * Both elements are inline spans made block, so it nests legally inside
- * headings and paragraphs as well as at block level.
  *
- * The reduced-motion case is handled globally by MotionConfig, which drops
- * the transform and leaves the text sitting where it belongs.
+ * The viewport observer sits on the outer, unclipped wrapper and the inner
+ * element only follows its variants. Observing the inner element directly
+ * fails: once translated fully below the clip box it has no visible area,
+ * so IntersectionObserver never reports it and the text stays hidden.
+ *
+ * Reduced motion is handled globally by MotionConfig.
  */
 export function Reveal({ children, delay = 0, className }: RevealProps) {
   return (
-    <span className={`block overflow-hidden pb-[0.08em] ${className ?? ""}`}>
+    <motion.span
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-8% 0px" }}
+      className={`block overflow-hidden pb-[0.08em] ${className ?? ""}`}
+    >
       <motion.span
-        initial={{ y: "105%" }}
-        whileInView={{ y: "0%" }}
-        viewport={{ once: true, margin: "-8% 0px" }}
+        variants={mask}
         transition={{ duration: 1, delay: delay * 0.07, ease: easeOutExpo }}
         className="block will-change-transform"
       >
         {children}
       </motion.span>
-    </span>
+    </motion.span>
   );
 }
 

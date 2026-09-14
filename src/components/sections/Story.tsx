@@ -3,11 +3,13 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useCalmMotion } from "@/lib/useCalmMotion";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { Reveal, FadeUp } from "@/components/motion/Reveal";
 import { site } from "@/data/site";
 
 export function Story() {
   const calm = useCalmMotion();
+  const wide = useMediaQuery("(min-width: 768px)");
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -65,18 +67,23 @@ export function Story() {
 
       {/* By the numbers, set large enough to be a graphic rather than a stat row. */}
       <div ref={ref} className="mt-16 overflow-hidden sm:mt-24">
+        {/* Drifts sideways on wider screens; on phones the figures wrap into a
+            ruled grid instead of running off the edge. */}
         <motion.dl
-          style={calm ? undefined : { x }}
-          className="flex w-max items-end gap-10 px-5 sm:gap-20 sm:px-8 lg:px-12"
+          style={calm || !wide ? undefined : { x }}
+          className="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-ink/15 px-5 pt-8 sm:px-8 md:flex md:w-max md:items-end md:gap-20 md:border-0 md:pt-0 lg:px-12"
         >
           {/* Each item is one div holding its own dt/dd, which is the only
               grouping a definition list allows. */}
-          {site.stats.map((stat) => (
-            <div key={stat.label} className="shrink-0">
+          {site.stats.map((stat, index) => (
+            <div
+              key={stat.label}
+              className={`shrink-0 ${index === 2 ? "col-span-2 md:col-span-1" : ""}`}
+            >
               <dt className="max-w-[16ch] text-label uppercase text-ink-soft">
                 {stat.label}
               </dt>
-              <dd className="mt-3 text-[clamp(4.5rem,15vw,13rem)] font-extrabold leading-[0.78] tracking-[-0.05em]">
+              <dd className="mt-3 text-[clamp(4rem,15vw,13rem)] font-extrabold leading-[0.78] tracking-[-0.05em]">
                 {stat.value}
               </dd>
             </div>

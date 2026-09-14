@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Logo } from "@/components/Logo";
 import type { BrandColor } from "@/lib/colors";
 import { panelBg, onBrandText } from "@/lib/colors";
 
@@ -17,8 +18,9 @@ type MediaProps = {
 };
 
 /**
- * One image slot. Until a real file exists at `src`, it renders a flat colour
- * field carrying the item's name — deliberate-looking rather than broken.
+ * One image slot. Until a real file exists at `src`, it renders a brand
+ * colour field with the mark ghosted large into one corner — art-directed
+ * rather than empty, so the layout reads as finished before assets land.
  */
 export function Media({
   src,
@@ -47,10 +49,14 @@ export function Media({
     <div
       role="img"
       aria-label={alt}
-      className={`flex h-full w-full flex-col justify-between p-5 sm:p-7 ${panelBg[color]} ${onBrandText[color]} ${className ?? ""}`}
+      className={`relative h-full w-full overflow-hidden ${panelBg[color]} ${onBrandText[color]} ${className ?? ""}`}
     >
-      <span className="text-label uppercase">Image pending</span>
-      <span className="max-w-[14ch] text-[clamp(1.35rem,2.4vw,2.25rem)] font-extrabold leading-[0.98] tracking-[-0.03em]">
+      <Logo
+        color={color}
+        onDark
+        className="absolute -bottom-[18%] -right-[12%] w-[72%] opacity-[0.16]"
+      />
+      <span className="absolute left-5 top-5 text-label uppercase sm:left-6 sm:top-6">
         {label}
       </span>
     </div>

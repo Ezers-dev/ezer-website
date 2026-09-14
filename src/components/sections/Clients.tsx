@@ -33,20 +33,20 @@ export function Clients({ items }: { items: ClientItem[] }) {
   const rows = [items.slice(0, half), items.slice(half)];
 
   return (
-    <section className="border-y border-ink/12 bg-paper-dim/40 py-20 sm:py-24">
-      <div className="mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
-        <h2 className="text-label uppercase text-ink-soft">
+    <section className="border-y border-ink/12 bg-paper-dim/40 py-16 sm:py-20">
+      <div className="mx-auto grid max-w-[1560px] gap-5 px-5 sm:px-8 lg:grid-cols-12 lg:gap-8 lg:px-12">
+        <h2 className="text-label uppercase text-ink-soft lg:col-span-3">
           <span className="pill mr-2 inline-block h-2 w-2 bg-green align-middle" />
           Who We&rsquo;ve Worked With
         </h2>
-        <p className="mt-5 max-w-[52ch] text-[1.15rem] font-medium leading-[1.5] tracking-[-0.015em]">
+        <p className="max-w-[46ch] text-[1.05rem] leading-relaxed text-ink-soft lg:col-span-6 lg:col-start-5">
           Trusted by organizations across sectors and continents &mdash; from
           global corporations to government institutions to growing local
           brands.
         </p>
       </div>
 
-      <div className="mt-12 space-y-2">
+      <div className="mt-10 space-y-1">
         {rows.map((row, index) => (
           <Marquee key={index} speed={index === 0 ? 34 : -34}>
             <span className="flex">
@@ -58,8 +58,8 @@ export function Clients({ items }: { items: ClientItem[] }) {
         ))}
       </div>
 
-      <div className="mx-auto mt-12 max-w-[1560px] px-5 sm:px-8 lg:px-12">
-        <p className="text-headline max-w-[26ch]">
+      <div className="mx-auto mt-10 grid max-w-[1560px] px-5 sm:px-8 lg:grid-cols-12 lg:gap-8 lg:px-12">
+        <p className="text-headline max-w-[26ch] lg:col-span-8 lg:col-start-5">
           <Reveal>
             <span className="text-blue">150+</span>
             <span className="text-ink"> startups and individual brands,</span>
