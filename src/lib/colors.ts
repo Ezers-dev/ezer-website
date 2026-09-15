@@ -54,3 +54,13 @@ export const panelBg: Record<BrandColor, string> = {
   yellow: "bg-yellow",
   ink: "bg-ink",
 };
+
+/** Hex for each panel tint, matching `panelBg`, for use outside Tailwind. */
+export const panelHex: Record<BrandColor, string> = {
+  blue: "#0071b0",
+  pink: "#d6004a",
+  green: "#6ba23a",
+  orange: "#f96b2a",
+  yellow: "#fbc400",
+  ink: "#0b1013",
+};

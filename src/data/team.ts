@@ -20,7 +20,7 @@ export const team: Person[] = [
     image: "/team/annie.jpg",
   },
   {
-    name: "Muiz",
+    name: "Baruwa",
     role: "Creative Designer",
     bio: "Takes identity systems from first sketch to final guideline across brand, digital and print.",
     image: "/team/muiz.jpg",

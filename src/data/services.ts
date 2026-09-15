@@ -1,7 +1,6 @@
 import type { BrandColor } from "@/lib/colors";
 
 export type Service = {
-  index: string;
   title: string;
   summary: string;
   detail: string[];
@@ -10,7 +9,6 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    index: "01",
     title: "Branding",
     summary:
       "We define what your brand stands for and make sure it looks like it.",
@@ -20,7 +18,6 @@ export const services: Service[] = [
     color: "blue",
   },
   {
-    index: "02",
     title: "Digital",
     summary:
       "We help clients harness digital channels to drive real outcomes: more traffic, stronger engagement, higher conversion.",
@@ -28,7 +25,6 @@ export const services: Service[] = [
     color: "pink",
   },
   {
-    index: "03",
     title: "Creative Strategy",
     summary: "Before we design anything, we ask why.",
     detail: [
@@ -37,7 +33,6 @@ export const services: Service[] = [
     color: "green",
   },
   {
-    index: "04",
     title: "Content Creation",
     summary:
       "We produce high-quality content — social, print, campaign — that resonates with your audience.",
