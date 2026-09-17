@@ -423,13 +423,10 @@ export function JourneyCanvas({ progress }: Progress) {
       ref={svgRef}
       viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}
       role="img"
-      aria-label="An idea that crossed borders: one idea in Lagos, Nigeria in 2012 grows through strategy into creative work, travels to Toronto, Canada, and resolves into a complete brand system."
+      aria-label="Our origin: one idea in Lagos, Nigeria in 2012 grows through strategy into creative work, travels to Toronto, Canada, and resolves into a complete brand system."
       className="story-canvas h-full max-h-full w-full"
       style={{ "--story-accent": panelHex[storyStages[0].color] } as CSSProperties}
     >
-      <text x={24} y={34} className="fill-ink-soft font-sans uppercase" style={LABEL}>
-        An idea that crossed borders
-      </text>
       {STAGE_NAMES.map((_, index) => (
         <StageReadout key={index} progress={progress} index={index} />
       ))}

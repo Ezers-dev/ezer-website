@@ -1,18 +1,29 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useScroll } from "motion/react";
+import { motion, useMotionValue, useScroll, useTransform } from "motion/react";
 import { easeOutExpo } from "@/lib/motion";
 import { useCalmMotion } from "@/lib/useCalmMotion";
 import { onBrandText, panelBg } from "@/lib/colors";
+import { BouncingHeadline, SEEN_BLUE } from "@/components/story/BouncingHeadline";
+import { OriginLink } from "@/components/story/OriginLink";
 import dynamic from "next/dynamic";
 import {
   storyClosing,
   storyHeadline,
   storyIntro,
+  storyOriginTitle,
   storyStages,
   storyStats,
 } from "@/data/story";
+
+/** The statement, word by word, for the bouncing reveal. */
+const HEADLINE_WORDS = [...storyHeadline.lead.split(" "), storyHeadline.accent];
+
+/** "Our Origin", with the last word split out so it can take the blue. */
+const ORIGIN_SPLIT = storyOriginTitle.lastIndexOf(" ");
+const ORIGIN_LEAD = storyOriginTitle.slice(0, ORIGIN_SPLIT);
+const ORIGIN_WORD = storyOriginTitle.slice(ORIGIN_SPLIT + 1);
 
 // Both compositions load as their own chunks, so neither competes with the
 // hero for the first paint. The desktop canvas is decorative and holds its
@@ -33,33 +44,6 @@ const reveal = {
   transition: { duration: 0.9, ease: easeOutExpo },
 } as const;
 
-/** "seen.", circled by hand as it comes into view. */
-function Seen({ children }: { children: string }) {
-  return (
-    <span className="relative inline-block text-blue">
-      {children}
-      <svg
-        aria-hidden
-        viewBox="0 0 220 100"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute -inset-x-[14%] -inset-y-[10%] h-[120%] w-[128%] overflow-visible"
-      >
-        <motion.path
-          d="M22 58 C 18 22, 92 8, 150 14 C 206 20, 214 58, 184 78 C 150 98, 58 96, 30 76 C 14 64, 26 38, 64 26"
-          className="fill-none stroke-blue"
-          strokeWidth={2.2}
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true, margin: "-20% 0px" }}
-          transition={{ duration: 1.4, delay: 0.5, ease: [0.65, 0, 0.35, 1] }}
-        />
-      </svg>
-    </span>
-  );
-}
-
 export function Story() {
   const calm = useCalmMotion();
   const trackRef = useRef<HTMLDivElement>(null);
@@ -77,28 +61,74 @@ export function Story() {
   const finished = useMotionValue(1);
   const progress = calm ? finished : scrollYProgress;
 
+  // The opening holds for a screen and a bit while the staircase closes into
+  // a line. Derived before use, as in What We Do: fed straight in, Motion
+  // hands opacity to the browser's scroll timeline, which mis-maps pinned
+  // tracks.
+  const openingRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: openingRaw } = useScroll({
+    target: openingRef,
+    offset: ["start start", "end end"],
+  });
+  const openingScrolled = useTransform(openingRaw, (value) => value);
+  const opening = calm ? finished : openingScrolled;
+  const introOpacity = useTransform(opening, [0.55, 0.85], [0, 1]);
+  const introY = useTransform(opening, [0.55, 0.85], [28, 0]);
+
+  // From the moment the opening lets go, a line runs on out of the circle
+  // around "seen." and arrives at "Origin", which takes the same blue as it
+  // lands. It finishes over a short stretch of scroll — while "Origin" rises
+  // only a quarter of the screen — so the line visibly travels down to meet
+  // it rather than drifting up the screen with the page.
+  const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const originRef = useRef<HTMLSpanElement>(null);
+  const { scrollYProgress: linkRaw } = useScroll({
+    target: originRef,
+    offset: ["start end", "start 0.72"],
+  });
+  const linkScrolled = useTransform(linkRaw, (value) => value);
+  const link = calm ? finished : linkScrolled;
+  const originColour = useTransform(link, [0.86, 1], ["#0b1013", SEEN_BLUE]);
+
   return (
-    <section id="story" className="scroll-mt-24 border-t border-ink/12 pt-20 sm:pt-28">
+    <section ref={sectionRef} id="story" className="relative scroll-mt-0">
+      {/* Opening: pinned for a screen and a bit. The staircase and bounce
+          play on arrival; scrolling on closes the steps into one centred line
+          and brings in the supporting sentence, and scrolling back undoes it. */}
+      <OriginLink
+        progress={link}
+        sectionRef={sectionRef}
+        trackRef={openingRef}
+        stageRef={stageRef}
+        targetRef={originRef}
+      />
+
+      <div ref={openingRef} className="relative h-[220svh]">
+        <div ref={stageRef} className="sticky top-0 flex h-[100svh] flex-col items-center justify-center overflow-hidden px-5 text-center sm:px-8 lg:px-12">
+          <BouncingHeadline
+            words={HEADLINE_WORDS}
+            progress={opening}
+            className="mx-auto text-[clamp(2.25rem,5.6vw,6rem)] font-extrabold leading-[0.96] tracking-[-0.035em] sm:whitespace-nowrap"
+          />
+          <motion.p
+            style={{ opacity: introOpacity, y: introY }}
+            className="mt-8 max-w-[34ch] text-lede font-medium text-ink-soft"
+          >
+            {storyIntro}
+          </motion.p>
+        </div>
+      </div>
+
       <div className="mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
-        {/* Opening: minimal, before any of the story moves. */}
-        <header className="grid gap-6 lg:grid-cols-12 lg:gap-8">
-          <p className="text-label uppercase text-ink-soft lg:col-span-3 lg:pt-5">
-            <span className="pill mr-2 inline-block h-2 w-2 bg-pink align-middle" />
-            Our Story
-          </p>
-          <div className="lg:col-span-9">
-            <motion.h2 {...reveal} className="text-display max-w-[13ch]">
-              {storyHeadline.lead} <Seen>{storyHeadline.accent}</Seen>
-            </motion.h2>
-            <motion.p
-              {...reveal}
-              transition={{ ...reveal.transition, delay: 0.15 }}
-              className="mt-7 max-w-[34ch] text-lede font-medium text-ink-soft"
-            >
-              {storyIntro}
-            </motion.p>
-          </div>
-        </header>
+        {/* Heading for the journey, left-aligned like the other section titles.
+            It sits above the track so the stages keep their scroll timing. */}
+        <motion.h3 {...reveal} className="text-display">
+          {ORIGIN_LEAD}{" "}
+          <motion.span ref={originRef} style={{ color: originColour }}>
+            {ORIGIN_WORD}
+          </motion.span>
+        </motion.h3>
 
         {/* Desktop: story blocks on the left, one anchored canvas on the right. */}
         <div ref={trackRef} className="relative mt-16 hidden lg:grid lg:grid-cols-12 lg:gap-8">

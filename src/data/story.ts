@@ -30,6 +30,9 @@ export const storyHeadline = {
 
 export const storyIntro = "12+ years of turning ambitious ideas into memorable brands.";
 
+/** Heading over the five-stage journey. */
+export const storyOriginTitle = "Our Origin";
+
 export const storyStages: StoryStage[] = [
   {
     id: "origin",

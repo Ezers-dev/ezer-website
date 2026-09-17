@@ -31,9 +31,9 @@ export default function Home() {
       <Hero />
       <Story />
       <Services />
+      <Team items={teamItems} />
       <Work items={workItems} />
       <Clients items={clientItems} />
-      <Team items={teamItems} />
       <Contact />
     </>
   );

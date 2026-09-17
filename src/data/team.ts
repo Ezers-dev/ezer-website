@@ -20,9 +20,21 @@ export const team: Person[] = [
     image: "/team/annie.jpg",
   },
   {
-    name: "Baruwa",
+    name: "Muiz",
     role: "Creative Designer",
     bio: "Takes identity systems from first sketch to final guideline across brand, digital and print.",
     image: "/team/muiz.jpg",
   },
 ];
+
+/** Printed on the front cover. */
+export const teamCover = {
+  title: "Our Team",
+  subtitle: "The people who set the direction are the people on the work.",
+};
+
+/** Printed on the back cover, once the book closes. */
+export const teamClosing = {
+  statement: "Different disciplines. One studio.",
+  signoff: "Small by design. Experienced by default.",
+};

@@ -157,18 +157,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.1 }}
-        className="relative z-10 mx-auto w-full max-w-[1560px] border-t border-ink/12 px-5 pt-5 text-[0.82rem] leading-relaxed text-ink-soft max-lg:[@media(max-height:700px)]:hidden sm:px-8 lg:px-12"
-      >
-        Since {site.founded}, we&rsquo;ve partnered with 160+ brands across
-        Africa, Europe and North America &mdash; from early-stage start-ups to
-        multinational institutions &mdash; building the branding, digital
-        presence, and creative content that turns strategy into visibility.
-      </motion.p>
     </section>
   );
 }
