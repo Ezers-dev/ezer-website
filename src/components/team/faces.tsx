@@ -133,7 +133,7 @@ export function FrontCoverFace() {
         <p className="text-[21cqw] font-extrabold leading-[0.88] tracking-[-0.05em]">{teamCover.title}</p>
         <p className="mt-[6cqw] max-w-[22ch] text-[max(0.95rem,4.6cqw)] font-semibold leading-[1.3]">{teamCover.subtitle}</p>
       </div>
-      <p className={`tabular-nums ${coverLabel}`}>The people · 01–03</p>
+      <p className={`tabular-nums ${coverLabel}`}>The people</p>
     </div>
   );
 }
@@ -145,8 +145,14 @@ export function BackCoverFace({ reveal }: { reveal: MotionValue<number> }) {
     <div className="@container relative flex h-full flex-col justify-between bg-orange px-[10%] py-[10%] text-ink">
       <p className={coverLabel}>Ezers &amp; Strategies</p>
       <motion.div style={{ opacity: reveal, y: rise }}>
-        <p className="text-[11cqw] font-extrabold leading-[0.95] tracking-[-0.04em]">{teamClosing.statement}</p>
-        <p className="mt-[6cqw] text-[max(0.95rem,4.2cqw)] font-semibold leading-[1.3]">{teamClosing.signoff}</p>
+        <p className="text-[9cqw] font-extrabold leading-[1.16] tracking-[-0.04em]">
+          {teamClosing.statementLines.map((line) => (
+            <span key={line} className="block whitespace-nowrap">
+              {line}
+            </span>
+          ))}
+        </p>
+        <p className="mt-[5cqw] text-[max(1rem,4.4cqw)] font-semibold leading-[1.45]">{teamClosing.signoff}</p>
       </motion.div>
       <p className={coverLabel}>{teamCover.title}</p>
     </div>

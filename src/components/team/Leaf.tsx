@@ -3,80 +3,139 @@
 import type { ReactNode } from "react";
 import { motion, useTransform, type MotionValue } from "motion/react";
 
+/** How many vertical strips a sheet bends through. */
+const STRIPS = 7;
+/**
+ * How far the outer edge runs ahead of the spine mid-turn, in degrees. The
+ * bend eases off as the sheet lands, so it always comes down flat.
+ */
+const CURL = 55;
+
 type LeafProps = {
-  /** 0° flat on the side it starts on, 180° flat on the other side. */
+  /** 0° flat on the right, 180° flat on the left. */
   angle: MotionValue<number>;
-  /** The page it starts as. It turns over the crease to the other side. */
-  from: "left" | "right";
   /** Stacking at rest: [before the turn, after it]. */
   rest: readonly [number, number];
-  /** Among pages turning at the same time, which went first (lower = first). */
-  order?: number;
   front: ReactNode;
   back: ReactNode;
   /** Reduced motion: no turn, the faces cross-fade in place instead. */
   calm: boolean;
 };
 
+type StripProps = {
+  index: number;
+  /** The whole sheet's turn, applied at the spine. */
+  angle: MotionValue<number>;
+  /** The extra turn each strip adds to the one before it. */
+  bend: MotionValue<number>;
+  front: ReactNode;
+  back: ReactNode;
+};
+
 /**
- * One sheet of the book, printed on both sides, turning about the crease.
- *
- * The sheet darkens as it stands up off the page and lightens again as it
- * comes down, and its back is flipped so it reads correctly once turned.
- * While it moves it rides above every page at rest.
+ * One strip of a sheet, hinged on the strip before it. Each shows its own
+ * slice of the front and back faces, so together they read as one page.
  */
-export function Leaf({ angle, from, rest, order = 0, front, back, calm }: LeafProps) {
-  const fromLeft = from === "left";
-  const rotateY = useTransform(angle, (a) => (fromLeft ? a : -a));
-  const zIndex = useTransform(angle, (a) => {
-    if (a <= 0.01) return rest[0];
-    if (a >= 179.99) return rest[1];
-    // Standing up, the first page to go is nearest the viewer; coming down,
-    // the last to go lands on top.
-    return 70 + (a > 90 ? order : -order);
-  });
+function Strip({ index, angle, bend, front, back }: StripProps) {
+  const spine = index === 0;
+  const rotateY = useTransform(spine ? angle : bend, (a) => -a);
+  // Strips further round the curve sit at a steeper angle to the light.
+  const shade = useTransform(bend, (b) => (Math.abs(b) / (CURL / (STRIPS - 1))) * (index / STRIPS) * 0.12);
+  // Each frame is 1px wider than its strip so neighbours overlap with no seam;
+  // the slices are measured against the strip itself.
+  const unit = "(100% - 1px)";
+  const width = `calc(${unit} * ${STRIPS})`;
+
+  return (
+    <motion.div
+      style={{ rotateY, transformOrigin: "0% 50%" }}
+      className={`absolute inset-y-0 w-full [transform-style:preserve-3d] ${spine ? "left-0" : "left-full"}`}
+    >
+      <div className="absolute inset-y-0 left-0 w-[calc(100%+1px)] overflow-hidden [backface-visibility:hidden]">
+        <div className="absolute inset-y-0" style={{ width, left: `calc(${unit} * ${-index})` }}>
+          {front}
+        </div>
+        <motion.div style={{ opacity: shade }} className="pointer-events-none absolute inset-0 bg-ink" />
+      </div>
+      {/* The back is mirrored, so this strip shows the slice from the other end. */}
+      <div className="absolute inset-y-0 -left-px w-[calc(100%+1px)] overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <div className="absolute inset-y-0" style={{ width, left: `calc(${unit} * ${-(STRIPS - 1 - index)} + 1px)` }}>
+          {back}
+        </div>
+        <motion.div style={{ opacity: shade }} className="pointer-events-none absolute inset-0 bg-ink" />
+      </div>
+      {index < STRIPS - 1 && <Strip index={index + 1} angle={angle} bend={bend} front={front} back={back} />}
+    </motion.div>
+  );
+}
+
+/**
+ * One sheet of the book, printed on both sides, turning right to left about
+ * the crease.
+ *
+ * Like paper, it doesn't turn as a board: the outer edge lifts first and the
+ * sheet curves as it goes over, flattening again as it lands. The curve comes
+ * from a chain of strips, each hinged on the last and turned a little further.
+ * The sheet darkens as it stands up and lightens as it comes down, and rides
+ * above every page at rest while it moves.
+ */
+export function Leaf({ angle, rest, front, back, calm }: LeafProps) {
+  const zIndex = useTransform(angle, (a) => (a <= 0.01 ? rest[0] : a >= 179.99 ? rest[1] : 70));
+  const bend = useTransform(angle, (a) => (CURL / (STRIPS - 1)) * Math.sin((a * Math.PI) / 180));
   const frontShade = useTransform(angle, [0, 90], [0, 0.3]);
   const backShade = useTransform(angle, [90, 180], [0.3, 0]);
-  // A soft highlight across the sheet as it passes upright, like light
-  // catching a curve in the paper.
-  const sheen = useTransform(angle, [30, 90, 150], [0, 0.16, 0]);
   const frontFade = useTransform(angle, [0, 90], [1, 0]);
   const backFade = useTransform(angle, [90, 180], [0, 1]);
-
-  // Darker towards the crease on whichever side the face is on.
-  const frontCrease = fromLeft ? "bg-gradient-to-l" : "bg-gradient-to-r";
-  const backCrease = fromLeft ? "bg-gradient-to-r" : "bg-gradient-to-l";
-  const startSide = fromLeft ? "left-0" : "left-1/2";
-  const endSide = fromLeft ? "left-1/2" : "left-0";
+  const flatFront = useTransform<number, string>(angle, (a) => (a <= 0.01 ? "visible" : "hidden"));
+  const flatBack = useTransform<number, string>(angle, (a) => (a >= 179.99 ? "visible" : "hidden"));
+  const moving = useTransform<number, string>(angle, (a) => (a > 0.01 && a < 179.99 ? "visible" : "hidden"));
 
   if (calm) {
     return (
       <>
-        <motion.div style={{ opacity: frontFade, zIndex: rest[0] }} className={`absolute inset-y-0 w-1/2 ${startSide}`}>
+        <motion.div style={{ opacity: frontFade, zIndex: rest[0] }} className="absolute inset-y-0 left-1/2 w-1/2">
           {front}
         </motion.div>
-        <motion.div style={{ opacity: backFade, zIndex: rest[1] }} className={`absolute inset-y-0 w-1/2 ${endSide}`}>
+        <motion.div style={{ opacity: backFade, zIndex: rest[1] }} className="absolute inset-y-0 left-0 w-1/2">
           {back}
         </motion.div>
       </>
     );
   }
 
+  // Each face carries its own crease shading, darker towards the spine, so
+  // the slices line up across the strips.
+  const frontFace = (
+    <div className="relative h-full">
+      {front}
+      <motion.div style={{ opacity: frontShade }} className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink/80 to-ink/25" />
+    </div>
+  );
+  const backFace = (
+    <div className="relative h-full">
+      {back}
+      <motion.div style={{ opacity: backShade }} className="pointer-events-none absolute inset-0 bg-gradient-to-l from-ink/80 to-ink/25" />
+    </div>
+  );
+
   return (
     <motion.div
-      style={{ rotateY, zIndex, transformOrigin: fromLeft ? "100% 50%" : "0% 50%" }}
-      className={`absolute inset-y-0 w-1/2 ${startSide} will-change-transform [transform-style:preserve-3d]`}
+      style={{ zIndex }}
+      className="absolute inset-y-0 left-1/2 w-1/2 [perspective:2800px] [perspective-origin:0%_50%]"
     >
-      <div className="absolute inset-0 overflow-hidden [backface-visibility:hidden]">
+      {/* At rest the sheet is flat, so it is drawn whole: strips only while it moves. */}
+      <motion.div style={{ visibility: flatFront }} className="absolute inset-0">
         {front}
-        <motion.div style={{ opacity: frontShade }} className={`pointer-events-none absolute inset-0 ${frontCrease} from-ink/80 to-ink/25`} />
-        <motion.div style={{ opacity: sheen }} className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent" />
-      </div>
-      <div className="absolute inset-0 overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)]">
+      </motion.div>
+      <motion.div style={{ visibility: flatBack }} className="absolute inset-y-0 -left-full w-full">
         {back}
-        <motion.div style={{ opacity: backShade }} className={`pointer-events-none absolute inset-0 ${backCrease} from-ink/80 to-ink/25`} />
-        <motion.div style={{ opacity: sheen }} className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-white to-transparent" />
-      </div>
+      </motion.div>
+      <motion.div
+        style={{ visibility: moving, width: `${100 / STRIPS}%` }}
+        className="absolute inset-y-0 left-0 [transform-style:preserve-3d]"
+      >
+        <Strip index={0} angle={angle} bend={bend} front={frontFace} back={backFace} />
+      </motion.div>
     </motion.div>
   );
 }

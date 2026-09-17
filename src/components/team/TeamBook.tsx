@@ -87,7 +87,7 @@ export function TeamBook({ people, crops, progress, spin, calm }: TeamBookProps)
   const rest = (i: number) => [50 - i, 20 + i] as const;
 
   return (
-    <motion.div style={{ x }} className="relative aspect-[8/5] w-[min(100cqw,160cqh)] [perspective:2800px]">
+    <motion.div data-team-book style={{ x }} className="relative aspect-[8/5] w-[min(100cqw,160cqh)] [perspective:2800px]">
       {/* The page blocks: paper, a hint of thickness at the outer edges. */}
       <motion.div
         style={{ zIndex: Z.block, opacity: leftBlock }}
@@ -100,7 +100,6 @@ export function TeamBook({ people, crops, progress, spin, calm }: TeamBookProps)
 
       <Leaf
         angle={open}
-        from="right"
         rest={rest(0)}
         calm={calm}
         front={<FrontCoverFace />}
@@ -108,7 +107,6 @@ export function TeamBook({ people, crops, progress, spin, calm }: TeamBookProps)
       />
       <Leaf
         angle={turn1}
-        from="right"
         rest={rest(1)}
         calm={calm}
         front={<DetailsFace person={ebenezer} index={0} count={count} spin={spin} />}
@@ -116,7 +114,6 @@ export function TeamBook({ people, crops, progress, spin, calm }: TeamBookProps)
       />
       <Leaf
         angle={turn2}
-        from="right"
         rest={rest(2)}
         calm={calm}
         front={<DetailsFace person={annie} index={1} count={count} spin={spin} />}
@@ -126,7 +123,6 @@ export function TeamBook({ people, crops, progress, spin, calm }: TeamBookProps)
       {/* The last page carries the back cover, and closes the book. */}
       <Leaf
         angle={close}
-        from="right"
         rest={rest(3)}
         calm={calm}
         front={<DetailsFace person={muiz} index={2} count={count} spin={spin} />}

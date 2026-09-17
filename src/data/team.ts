@@ -35,6 +35,8 @@ export const teamCover = {
 
 /** Printed on the back cover, once the book closes. */
 export const teamClosing = {
+  /** Set one sentence per line on the back cover. */
+  statementLines: ["Different disciplines.", "One studio."],
   statement: "Different disciplines. One studio.",
   signoff: "Small by design. Experienced by default.",
 };

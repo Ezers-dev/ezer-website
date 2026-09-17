@@ -207,3 +207,14 @@ html.lenis body {
 .story-canvas {
   transition: --story-accent 700ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* The client wall's logos drift a few pixels side to side, each at its own pace. */
+@keyframes wall-drift {
+  from { transform: translateX(-5px); }
+  to { transform: translateX(5px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wall-drift {
+    animation: wall-drift 16s ease-in-out infinite alternate;
+  }
+}

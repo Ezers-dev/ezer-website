@@ -46,8 +46,8 @@ export function Team({ items }: { items: TeamItem[] }) {
 
   return (
     <section id="team" aria-labelledby="team-heading" className="relative scroll-mt-24 pt-[clamp(4rem,8vw,8rem)]">
-      <div ref={trackRef} className="relative h-[480svh] lg:h-[550svh]">
-        <div className="sticky top-0 mx-auto flex h-[100svh] max-w-[1560px] flex-col px-5 pb-6 pt-[calc(72px+1.5rem)] sm:px-8 lg:px-12 lg:pb-10 lg:pt-[calc(83px+2.5rem)]">
+      <div ref={trackRef} data-team-track className="relative h-[480svh] lg:h-[550svh]">
+        <div data-team-stage className="sticky top-0 mx-auto flex h-[100svh] max-w-[1560px] flex-col px-5 pb-6 pt-[calc(72px+1.5rem)] sm:px-8 lg:px-12 lg:pb-10 lg:pt-[calc(83px+2.5rem)]">
           <motion.div
             aria-hidden
             style={{ opacity: bookOpacity, y: bookY, scale: bookScale }}

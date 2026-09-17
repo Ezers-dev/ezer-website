@@ -42,4 +42,4 @@ export function shadowLanding(angle: number) {
   return angle > 90 && angle < 180 ? 0.3 * Math.sin(((angle - 90) / 90) * Math.PI) : 0;
 }
 
-export const pad = (n: number) => String(n).padStart(2, "0");
+export { pad } from "@/lib/pad";
