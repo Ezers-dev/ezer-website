@@ -366,7 +366,8 @@ function System({ progress }: Progress) {
 
 /* ---------------------------------------------------------- stage index */
 
-const STAGE_NAMES = ["Origin", "Strategy", "Creative", "Global", "Impact"];
+/** One line for the whole journey; it only changes colour as the stages pass. */
+const JOURNEY_LABEL = "Taking you on a journey";
 
 function StageReadout({ progress, index }: Progress & { index: number }) {
   const windows = Object.values(STAGE);
@@ -389,7 +390,7 @@ function StageReadout({ progress, index }: Progress & { index: number }) {
       // they cross-fade.
       style={{ ...LABEL, fontSize: 14, fontWeight: 800, fill: accentFor(storyStages[index].color), opacity }}
     >
-      {`0${index + 1} / 05 · ${STAGE_NAMES[index]}`}
+      {JOURNEY_LABEL}
     </motion.text>
   );
 }
@@ -427,7 +428,7 @@ export function JourneyCanvas({ progress }: Progress) {
       className="story-canvas h-full max-h-full w-full"
       style={{ "--story-accent": panelHex[storyStages[0].color] } as CSSProperties}
     >
-      {STAGE_NAMES.map((_, index) => (
+      {storyStages.map((_, index) => (
         <StageReadout key={index} progress={progress} index={index} />
       ))}
 

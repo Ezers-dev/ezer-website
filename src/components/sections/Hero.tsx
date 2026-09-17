@@ -24,9 +24,9 @@ const line = {
  */
 const DROPS = [950, 1750, 2550];
 
-/** Break point for the note on wider screens, so it sets on two lines. */
+/** Set on two full lines by its own measure, rather than a hard break. */
 const NOTE =
-  "We are a creative agency helping ambitious brands\nlook, sound, and move like the market leaders they’re becoming.";
+  "We are a creative agency helping ambitious brands look, sound, and move like the market leaders they’re becoming.";
 
 export function Hero() {
   const calm = useCalmMotion();
@@ -78,7 +78,7 @@ export function Hero() {
       delay={0.55}
       pace={30}
       text={NOTE}
-      className="w-full text-[0.95rem] font-semibold leading-[1.45] tracking-[-0.01em] sm:w-max sm:whitespace-pre-line sm:text-[0.9rem] lg:text-[clamp(0.95rem,1.2vw,1.2rem)]"
+      className="w-full text-[0.95rem] font-semibold leading-[1.45] tracking-[-0.01em] sm:max-w-[54ch] sm:text-[0.88rem] lg:text-[clamp(0.85rem,0.98vw,1.02rem)]"
     />
   );
 
@@ -145,7 +145,7 @@ export function Hero() {
             <Magnetic>
               <Link
                 href="/#contact"
-                className="pill inline-flex items-center gap-2 border-[1.5px] border-blue px-5 py-3 text-[0.88rem] font-semibold transition-colors duration-300 hover:border-blue-deep hover:bg-blue-deep hover:text-paper sm:px-6 sm:py-3.5 sm:text-[0.9rem]"
+                className="pill inline-flex items-center gap-2 border-[2.5px] border-blue px-5 py-3 text-[0.88rem] font-semibold transition-colors duration-300 hover:border-blue-deep hover:bg-blue-deep hover:text-paper sm:px-6 sm:py-3.5 sm:text-[0.9rem]"
               >
                 Start a Project <span aria-hidden>→</span>
               </Link>

@@ -63,7 +63,7 @@ export function Nav() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
           light ? "text-paper" : "text-ink"
-        } ${!open && !onColor ? "nav-glass" : "bg-transparent"}`}
+        } ${open ? "bg-transparent" : onColor ? (light ? "nav-glass-on-dark" : "nav-glass-on-light") : "nav-glass"}`}
       >
         <div
           ref={barRef}

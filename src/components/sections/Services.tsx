@@ -228,9 +228,8 @@ export function Services() {
           <div className="relative mx-auto flex w-full max-w-[1560px] flex-1 flex-col px-5 pb-10 pt-28 sm:px-8 lg:px-12">
             <div className="flex items-baseline justify-between border-b border-current/25 pb-4">
               <p className="text-label uppercase">What We Do</p>
-              <p className="max-w-[44ch] text-right text-[0.85rem] leading-relaxed">
-                Four disciplines. One goal: making sure your brand shows up with
-                clarity and consistency, everywhere it matters.
+              <p className="max-w-[40ch] text-right text-[clamp(0.95rem,1.15vw,1.2rem)] font-medium leading-snug">
+                Making sure your brand shows up with clarity and consistency, everywhere it matters.
               </p>
             </div>
 

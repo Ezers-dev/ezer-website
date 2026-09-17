@@ -14,6 +14,13 @@ export const site = {
   founded: 2012,
 } as const;
 
+export const contact = {
+  eyebrow: "Start a conversation",
+  title: "Tell us what you're building.",
+  lede: "A brand challenge, a launch on the horizon, or an identity that needs a refresh — start here and we'll take it from the top.",
+  reply: "We reply within two business days.",
+} as const;
+
 export const nav = [
   { label: "Story", href: "/#story" },
   { label: "What We Do", href: "/#services" },

@@ -218,3 +218,22 @@ html.lenis body {
     animation: wall-drift 16s ease-in-out infinite alternate;
   }
 }
+
+/*
+ * Over a coloured panel the bar keeps its own backdrop, so the section's
+ * words never read through it: a scrim in the opposite tone to the nav's
+ * text, blurred like the paper glass above.
+ */
+.nav-glass-on-dark,
+.nav-glass-on-light {
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+}
+.nav-glass-on-dark {
+  background: rgb(11 16 19 / 0.34);
+  box-shadow: inset 0 -1px 0 rgb(255 255 255 / 0.14);
+}
+.nav-glass-on-light {
+  background: rgb(246 245 242 / 0.36);
+  box-shadow: inset 0 -1px 0 rgb(11 16 19 / 0.1);
+}

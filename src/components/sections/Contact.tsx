@@ -1,37 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { Reveal } from "@/components/motion/Reveal";
-import { site } from "@/data/site";
+import { contact, site } from "@/data/site";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-function LocalTime({ timeZone, city }: { timeZone: string; city: string }) {
+/** The time where the studio is, kept current while the page is open. */
+function LocalTime({ timeZone }: { timeZone: string }) {
   const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
     const tick = () =>
-      setTime(
-        new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone,
-        }).format(new Date()),
-      );
+      setTime(new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone }).format(new Date()));
     tick();
     const id = setInterval(tick, 30_000);
     return () => clearInterval(id);
   }, [timeZone]);
 
-  return (
-    <span className="tabular-nums">
-      {city}
-      {time ? ` ${time}` : ""}
-    </span>
-  );
+  // Nothing until the clock is read on the client, so the panel doesn't shift.
+  return <span className="tabular-nums text-paper/55">{time ?? "—:—"}</span>;
 }
 
+/**
+ * Start a Conversation: an ink panel that closes the page, with the form as
+ * the main thing on it and the studio's own details set small beneath.
+ */
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -55,169 +50,153 @@ export function Contact() {
       form.reset();
     } catch {
       setStatus("error");
-      setError(
-        `Something went wrong. Email us directly at ${site.email} and we'll pick it up from there.`,
-      );
+      setError(`Something went wrong. Email us at ${site.email} and we'll pick it up from there.`);
     }
   }
 
   return (
-    <section
-      id="contact"
-      data-nav-theme="paper"
-      className="scroll-mt-0 bg-blue-deep text-paper"
-    >
-      <div className="mx-auto max-w-[1560px] px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
-        <div className="text-display max-w-[16ch]">
-          <Reveal>Start a</Reveal>
-          <Reveal delay={1}>Conversation</Reveal>
-        </div>
-
-        <div className="mt-12 grid gap-14 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-5">
-            <p className="text-lede max-w-[38ch] font-medium">
-              Have a brand challenge, a launch on the horizon, or an identity
-              that needs a refresh? Let&rsquo;s talk.
-            </p>
-
-            <dl className="mt-10 space-y-6 border-t border-paper/25 pt-8">
-              <div>
-                <dt className="text-label uppercase text-paper">Call us</dt>
-                <dd className="mt-2 space-y-1">
-                  {site.phones.map((phone) => (
-                    <a
-                      key={phone.href}
-                      href={phone.href}
-                      className="block text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold tracking-[-0.03em] underline decoration-paper/60 decoration-2 underline-offset-[6px] transition-colors hover:decoration-paper"
-                    >
-                      {phone.number}
-                    </a>
-                  ))}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-label uppercase text-paper">Email us</dt>
-                <dd className="mt-2">
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="break-all text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold tracking-[-0.03em] underline decoration-paper/60 decoration-2 underline-offset-[6px] transition-colors hover:decoration-paper"
-                  >
-                    {site.email}
-                  </a>
-                </dd>
-              </div>
-              <div>
-                <dt className="text-label uppercase text-paper">
-                  We operate in
-                </dt>
-                <dd className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-[0.95rem] font-medium">
-                  {site.locations.map((location) => (
-                    <span key={location.country} className="flex items-center gap-2">
-                      <span className="pill h-1.5 w-1.5 bg-yellow" />
-                      {location.country}
-                      <span className="text-paper">
-                        <LocalTime
-                          timeZone={location.timeZone}
-                          city={location.city}
-                        />
-                      </span>
-                    </span>
-                  ))}
-                </dd>
-              </div>
-            </dl>
-
-            <Magnetic className="mt-10 block">
-              <a
-                href={`mailto:${site.email}?subject=Booking%20a%20call`}
-                className="pill inline-flex items-center gap-2 bg-paper px-6 py-3.5 text-[0.9rem] font-semibold text-ink transition-colors duration-300 hover:bg-ink hover:text-paper"
-              >
-                Book a Call <span aria-hidden>→</span>
-              </a>
-            </Magnetic>
+    <section id="contact" data-nav-theme="paper" className="scroll-mt-0 bg-ink text-paper">
+      <div className="mx-auto max-w-[1560px] px-5 pb-[clamp(4rem,7vw,6rem)] pt-[clamp(5rem,10vw,9rem)] sm:px-8 lg:px-12">
+        <header className="grid gap-x-10 gap-y-6 lg:grid-cols-12">
+          <p className="text-label uppercase text-paper/55 lg:col-span-3">{contact.eyebrow}</p>
+          <div className="lg:col-span-9">
+            <h2 className="text-display max-w-[14ch]">
+              <Reveal>Tell us what</Reveal>
+              <Reveal delay={1}>
+                you&rsquo;re <span className="text-blue">building.</span>
+              </Reveal>
+            </h2>
+            <p className="mt-8 max-w-[46ch] text-lede font-medium text-paper/75">{contact.lede}</p>
           </div>
+        </header>
 
-          <div className="lg:col-span-6 lg:col-start-7">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <h3 className="text-label uppercase text-paper">
-                Send a Message
-              </h3>
+        <form onSubmit={handleSubmit} className="mt-[clamp(3.5rem,7vw,6rem)] grid gap-x-10 lg:grid-cols-12">
+          <div className="lg:col-span-9 lg:col-start-4">
+            <div className="grid gap-x-10 gap-y-[clamp(2rem,4vw,3rem)] sm:grid-cols-2">
+              <Field name="name" label="Your name" autoComplete="name" placeholder="Ada Okoye" required />
+              <Field name="email" label="Email" type="email" autoComplete="email" placeholder="ada@studio.com" required />
+              <Field name="company" label="Company" autoComplete="organization" placeholder="Optional" />
+              <Field name="budget" label="Budget" placeholder="Optional" />
+            </div>
 
-              <Field name="name" label="Your name" autoComplete="name" required />
+            <div className="mt-[clamp(2rem,4vw,3rem)]">
               <Field
-                name="email"
-                label="Email"
-                type="email"
-                autoComplete="email"
+                name="message"
+                label="What are you working on?"
+                placeholder="A launch, a rebrand, a campaign…"
                 required
+                multiline
               />
-              <Field name="company" label="Company (optional)" />
+            </div>
 
-              <div>
-                <label
-                  htmlFor="message"
-                  className="text-label uppercase text-paper"
+            <div className="mt-[clamp(2.5rem,5vw,4rem)] flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Magnetic>
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="pill inline-flex items-center gap-3 bg-paper px-8 py-4 text-[0.95rem] font-semibold text-ink transition-colors duration-300 hover:bg-blue hover:text-paper disabled:opacity-60"
                 >
-                  What are you working on?
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  required
-                  className="mt-2 w-full resize-none border-b border-paper/55 bg-transparent pb-2 text-[1.05rem] font-medium placeholder:text-paper/75 focus:border-paper focus:outline-none"
-                  placeholder="A launch, a rebrand, a campaign…"
-                />
-              </div>
+                  {status === "sending" ? "Sending…" : "Send a message"}
+                  <span aria-hidden>→</span>
+                </button>
+              </Magnetic>
+              <p className="text-[0.9rem] text-paper/55">{contact.reply}</p>
+            </div>
 
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="pill inline-flex items-center gap-2 bg-ink px-6 py-3.5 text-[0.9rem] font-semibold text-paper transition-colors duration-300 hover:bg-paper hover:text-ink disabled:opacity-60"
-              >
-                {status === "sending" ? "Sending…" : "Send a Message"}
-                <span aria-hidden>→</span>
-              </button>
-
-              <p aria-live="polite" className="text-[0.9rem]">
-                {status === "sent" &&
-                  "Thank you — your message is in. We reply within two business days."}
-                {status === "error" && error}
-              </p>
-            </form>
+            <p aria-live="polite" className="mt-5 min-h-6 text-[0.95rem] font-medium">
+              {status === "sent" && <span className="text-blue">Thank you — your message is in.</span>}
+              {status === "error" && <span className="text-pink">{error}</span>}
+            </p>
           </div>
+        </form>
+
+        {/* The studio's own details, small: the form is the way in. */}
+        <div className="mt-[clamp(4rem,8vw,7rem)] grid gap-x-10 gap-y-8 border-t border-paper/15 pt-9 lg:grid-cols-12">
+          <p className="text-label uppercase text-paper/55 lg:col-span-3">Or reach us directly</p>
+          <dl className="grid gap-x-10 gap-y-7 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-3">
+            <Detail label="Email">
+              <a href={`mailto:${site.email}`} className="break-all hover:text-blue">
+                {site.email}
+              </a>
+            </Detail>
+            {site.phones.map((phone) => (
+              <Detail key={phone.href} label={phone.label}>
+                <a href={phone.href} className="hover:text-blue">
+                  {phone.number}
+                </a>
+              </Detail>
+            ))}
+            {site.locations.map((location) => (
+              <Detail key={location.city} label={`${location.country} time`}>
+                <span className="flex items-baseline gap-3">
+                  {location.city} <LocalTime timeZone={location.timeZone} />
+                </span>
+              </Detail>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
   );
 }
 
-function Field({
-  name,
-  label,
-  type = "text",
-  required,
-  autoComplete,
-}: {
+function Detail({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div>
+      <dt className="text-label uppercase text-paper/55">{label}</dt>
+      <dd className="mt-2 text-[1.02rem] font-semibold tracking-[-0.01em] transition-colors duration-300">{children}</dd>
+    </div>
+  );
+}
+
+type FieldProps = {
   name: string;
   label: string;
   type?: string;
+  placeholder?: string;
   required?: boolean;
   autoComplete?: string;
-}) {
+  multiline?: boolean;
+};
+
+/**
+ * One line of the form: a small label, big type to write in, and a rule that
+ * lights up in brand blue as the field takes focus.
+ */
+function Field({ name, label, type = "text", placeholder, required, autoComplete, multiline }: FieldProps) {
+  // The site-wide focus ring (globals.css) marks the focused field; the blue
+  // rule and label are the quieter half of the same signal.
+  const shared =
+    "w-full resize-none bg-transparent pb-3 text-[clamp(1.15rem,1.8vw,1.5rem)] font-medium tracking-[-0.02em] text-paper placeholder:text-paper/30";
+
   return (
-    <div>
-      <label htmlFor={name} className="text-label uppercase text-paper">
+    <div className="group/field relative">
+      <label
+        htmlFor={name}
+        className="text-label block uppercase text-paper/55 transition-colors duration-300 group-has-[:focus]/field:text-blue"
+      >
         {label}
+        {required && <span className="ml-1 text-blue">*</span>}
       </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        required={required}
-        autoComplete={autoComplete}
-        className="mt-2 w-full border-b border-paper/55 bg-transparent pb-2 text-[1.05rem] font-medium placeholder:text-paper/75 focus:border-paper focus:outline-none"
-      />
+      <div className="mt-3">
+        {multiline ? (
+          <textarea id={name} name={name} rows={3} required={required} placeholder={placeholder} className={shared} />
+        ) : (
+          <input
+            id={name}
+            name={name}
+            type={type}
+            required={required}
+            autoComplete={autoComplete}
+            placeholder={placeholder}
+            className={shared}
+          />
+        )}
+        {/* The rule under the field, drawn in from the left on focus. */}
+        <span aria-hidden className="relative block h-px w-full bg-paper/20">
+          <span className="absolute inset-0 origin-left scale-x-0 bg-blue transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-has-[:focus]/field:scale-x-100" />
+        </span>
+      </div>
     </div>
   );
 }
