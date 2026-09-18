@@ -39,8 +39,6 @@ type StripProps = {
 function Strip({ index, angle, bend, front, back }: StripProps) {
   const spine = index === 0;
   const rotateY = useTransform(spine ? angle : bend, (a) => -a);
-  // Strips further round the curve sit at a steeper angle to the light.
-  const shade = useTransform(bend, (b) => (Math.abs(b) / (CURL / (STRIPS - 1))) * (index / STRIPS) * 0.12);
   // Each frame is 1px wider than its strip so neighbours overlap with no seam;
   // the slices are measured against the strip itself.
   const unit = "(100% - 1px)";
@@ -55,14 +53,12 @@ function Strip({ index, angle, bend, front, back }: StripProps) {
         <div className="absolute inset-y-0" style={{ width, left: `calc(${unit} * ${-index})` }}>
           {front}
         </div>
-        <motion.div style={{ opacity: shade }} className="pointer-events-none absolute inset-0 bg-ink" />
       </div>
       {/* The back is mirrored, so this strip shows the slice from the other end. */}
       <div className="absolute inset-y-0 -left-px w-[calc(100%+1px)] overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)]">
         <div className="absolute inset-y-0" style={{ width, left: `calc(${unit} * ${-(STRIPS - 1 - index)} + 1px)` }}>
           {back}
         </div>
-        <motion.div style={{ opacity: shade }} className="pointer-events-none absolute inset-0 bg-ink" />
       </div>
       {index < STRIPS - 1 && <Strip index={index + 1} angle={angle} bend={bend} front={front} back={back} />}
     </motion.div>
