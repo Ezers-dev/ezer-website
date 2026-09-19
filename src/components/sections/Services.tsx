@@ -250,6 +250,10 @@ export function Services() {
               ))}
             </div>
 
+
+
+            
+
             <ol ref={tabsRef} className="relative flex items-center gap-6 border-t border-current/25 pt-4">
               {services.map((service, index) => (
                 <li
