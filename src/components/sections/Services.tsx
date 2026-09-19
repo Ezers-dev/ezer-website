@@ -233,6 +233,8 @@ export function Services() {
               </p>
             </div>
 
+            
+
             {/* Oversized index, ghosted into the right half of the panel. */}
             {services.map((service, index) => (
               <GhostIndex key={service.title} progress={scrollYProgress} index={index} />
