@@ -8,7 +8,7 @@ export type Person = {
 
 export const team: Person[] = [
   {
-    name: "Ebenezer",
+    name: "Eben",
     role: "Partner & Creative Lead",
     bio: "Sets the creative direction on every engagement and has led the studio's work since 2012.",
     image: "/team/ebenezer.jpg",
@@ -27,16 +27,7 @@ export const team: Person[] = [
   },
 ];
 
-/** Printed on the front cover. */
-export const teamCover = {
+export const teamIntro = {
   title: "Our Team",
   subtitle: "The people who set the direction are the people on the work.",
-};
-
-/** Printed on the back cover, once the book closes. */
-export const teamClosing = {
-  /** Set one sentence per line on the back cover. */
-  statementLines: ["Different disciplines.", "One studio."],
-  statement: "Different disciplines. One studio.",
-  signoff: "Small by design. Experienced by default.",
 };

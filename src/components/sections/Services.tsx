@@ -100,12 +100,15 @@ function Discipline({ progress, index, active }: { progress: MotionValue<number>
       style={{ opacity, y, pointerEvents: active ? "auto" : "none" }}
       // Copy stays in the left part of the panel so long titles wrap
       // instead of running into the index on the right.
-      className="absolute inset-0 flex flex-col justify-center pr-[42%] will-change-transform"
+      className="absolute inset-0 flex flex-col justify-center pr-[30%] will-change-transform"
     >
-      <h3 className="text-[clamp(3rem,min(9.5vw,13svh),9rem)] font-extrabold leading-[0.88] tracking-[-0.045em]">
+      <h3 className="max-w-[13ch] text-[clamp(2.75rem,min(6.6vw,11.5svh),6.75rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
         {service.title}
       </h3>
-      <div className="mt-7 max-w-[54ch] space-y-3 text-[clamp(1rem,1.5vw,1.3rem)] leading-[1.5]">
+      {service.subtitle && (
+        <p className="mt-4 text-[clamp(1.25rem,2.2vw,2rem)] font-bold tracking-[-0.02em]">{service.subtitle}</p>
+      )}
+      <div className="mt-7 max-w-[46ch] space-y-3 text-[clamp(1rem,1.5vw,1.3rem)] leading-[1.5]">
         <p className="font-semibold">{service.summary}</p>
         {service.detail.map((paragraph) => (
           <p key={paragraph} className="font-normal">
@@ -132,7 +135,7 @@ function GhostIndex({ progress, index }: { progress: MotionValue<number>; index:
 }
 
 /**
- * The section pins while four discipline panels pass through it, each owning a
+ * The section pins while the service panels pass through it, each owning a
  * logo colour. Everything is scrubbed by scroll position — colour, copy,
  * index and the tab underline — so it moves exactly as far and as fast as the
  * visitor scrolls, and runs backwards when they scroll back. Under reduced
@@ -292,8 +295,7 @@ function ServicesStacked() {
       <div className="mx-auto max-w-[1560px] px-5 pb-6 pt-16 sm:px-8 lg:px-12">
         <p className="text-label uppercase text-ink-soft">What We Do</p>
         <p className="mt-4 max-w-[46ch] text-[1.05rem] leading-relaxed text-ink-soft">
-          Four disciplines. One goal: making sure your brand shows up with
-          clarity and consistency, everywhere it matters.
+          One goal: making sure your brand shows up with clarity and consistency, everywhere it matters.
         </p>
       </div>
       {services.map((service) => (
@@ -303,9 +305,10 @@ function ServicesStacked() {
           className={`px-5 py-14 sm:px-8 lg:px-12 ${panelBg[service.color]} ${onBrandText[service.color]}`}
         >
           <div className="mx-auto max-w-[1560px]">
-            <h3 className="text-[clamp(2.5rem,11vw,4.5rem)] font-extrabold leading-[0.9] tracking-[-0.04em]">
+            <h3 className="text-[clamp(2.25rem,10vw,4.5rem)] font-extrabold leading-[0.92] tracking-[-0.04em]">
               {service.title}
             </h3>
+            {service.subtitle && <p className="mt-3 text-[1.25rem] font-bold tracking-[-0.02em]">{service.subtitle}</p>}
             <div className="mt-5 max-w-[52ch] space-y-3 text-[1.02rem] leading-[1.55]">
               <p className="font-semibold">{service.summary}</p>
               {service.detail.map((paragraph) => (

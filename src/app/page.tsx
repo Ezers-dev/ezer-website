@@ -4,7 +4,6 @@ import { Services } from "@/components/sections/Services";
 import { Work } from "@/components/sections/Work";
 import { Team } from "@/components/sections/Team";
 import { Contact } from "@/components/sections/Contact";
-import { BookLines } from "@/components/work/BookLines";
 import { team } from "@/data/team";
 import { hasAsset } from "@/lib/media";
 
@@ -21,12 +20,8 @@ export default function Home() {
       <Hero />
       <Story />
       <Services />
-      {/* One positioned box round both, for the lines from the team book into the work headline. */}
-      <div className="relative">
-        <Team items={teamItems} />
-        <Work />
-        <BookLines />
-      </div>
+      <Team items={teamItems} />
+      <Work />
       <Contact />
     </>
   );

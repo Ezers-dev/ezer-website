@@ -9,7 +9,6 @@ import { BouncingHeadline, SEEN_BLUE } from "@/components/story/BouncingHeadline
 import { OriginLink } from "@/components/story/OriginLink";
 import dynamic from "next/dynamic";
 import {
-  storyClosing,
   storyHeadline,
   storyIntro,
   storyOriginTitle,
@@ -61,19 +60,7 @@ export function Story() {
   const finished = useMotionValue(1);
   const progress = calm ? finished : scrollYProgress;
 
-  // The opening holds for a screen and a bit while the staircase closes into
-  // a line. Derived before use, as in What We Do: fed straight in, Motion
-  // hands opacity to the browser's scroll timeline, which mis-maps pinned
-  // tracks.
   const openingRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: openingRaw } = useScroll({
-    target: openingRef,
-    offset: ["start start", "end end"],
-  });
-  const openingScrolled = useTransform(openingRaw, (value) => value);
-  const opening = calm ? finished : openingScrolled;
-  const introOpacity = useTransform(opening, [0.55, 0.85], [0, 1]);
-  const introY = useTransform(opening, [0.55, 0.85], [28, 0]);
 
   // From the moment the opening lets go, a line runs on out of the circle
   // around "seen." and arrives at "Origin", which takes the same blue as it
@@ -93,9 +80,8 @@ export function Story() {
 
   return (
     <section ref={sectionRef} id="story" className="relative scroll-mt-0">
-      {/* Opening: pinned for a screen and a bit. The staircase and bounce
-          play on arrival; scrolling on closes the steps into one centred line
-          and brings in the supporting sentence, and scrolling back undoes it. */}
+      {/* Opening: the statement as one centred line, with a line running on
+          from the circle round "seen." down to "Origin". */}
       <OriginLink
         progress={link}
         sectionRef={sectionRef}
@@ -104,23 +90,17 @@ export function Story() {
         targetRef={originRef}
       />
 
-      <div ref={openingRef} className="relative h-[220svh]">
-        <div ref={stageRef} className="sticky top-0 flex h-[100svh] flex-col items-center justify-center overflow-hidden px-5 text-center sm:px-8 lg:px-12">
+      <div ref={openingRef} className="relative">
+        <div ref={stageRef} className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 text-center sm:px-8 lg:px-12">
           <BouncingHeadline
             words={HEADLINE_WORDS}
-            progress={opening}
             className="mx-auto text-[clamp(2.25rem,5.6vw,6rem)] font-extrabold leading-[0.96] tracking-[-0.035em] sm:whitespace-nowrap"
           />
-          <motion.p
-            style={{ opacity: introOpacity, y: introY }}
-            className="mt-8 max-w-[34ch] text-lede font-medium text-ink-soft"
-          >
-            {storyIntro}
-          </motion.p>
+          <p className="mt-[clamp(1.75rem,3vw,2.75rem)] max-w-[34ch] text-lede font-medium text-ink-soft">{storyIntro}</p>
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-[1560px] px-5 pb-[clamp(5rem,9vw,8rem)] sm:px-8 lg:px-12">
         {/* Heading for the journey, left-aligned like the other section titles.
             It sits above the track so the stages keep their scroll timing. */}
         <motion.h3 {...reveal} className="text-display">
@@ -197,7 +177,7 @@ export function Story() {
               transition={{ duration: 1.4, ease: [0.65, 0, 0.35, 1] }}
               className="absolute left-0 right-0 top-0 h-[2px] origin-left bg-blue"
             />
-            <dl className="grid grid-cols-4">
+            <dl className="grid grid-cols-3">
               {storyStats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -220,14 +200,6 @@ export function Story() {
             </dl>
           </div>
         </div>
-
-        {/* Resolved: calm and confident, then on to the next section. */}
-        <motion.p
-          {...reveal}
-          className="mx-auto max-w-[22ch] py-24 text-center text-headline sm:py-32"
-        >
-          {storyClosing}
-        </motion.p>
       </div>
     </section>
   );

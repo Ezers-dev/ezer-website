@@ -1,46 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
 import { easeOutExpo } from "@/lib/motion";
-import { pad } from "@/lib/pad";
 import { useCalmMotion } from "@/lib/useCalmMotion";
-import { clients, clientsIntro } from "@/data/clients";
+import { clients, clientsClosing, clientsIntro } from "@/data/clients";
 import { ClientWall } from "@/components/work/ClientWall";
 import { ClientGrid } from "@/components/work/ClientGrid";
 import { Reveal } from "@/components/motion/Reveal";
-import { MARK_HEX } from "@/components/work/BookLines";
-
-/**
- * One line of the headline, with its marked words wrapped so the lines from
- * the team book can find them and colour them. Without the lines (phones,
- * tablets) the marks simply wear their colours.
- */
-function MarkedLine({ line }: { line: string }) {
-  const marks = clientsIntro.marks.filter((mark) => line.includes(mark.text));
-  if (!marks.length) return <>{line}</>;
-  const pattern = new RegExp(`(${marks.map((mark) => mark.text).join("|")})`);
-  return (
-    <>
-      {line.split(pattern).map((part, index) => {
-        const mark = marks.find((m) => m.text === part);
-        if (!mark) return part;
-        return (
-          <span
-            key={index}
-            data-mark={mark.colour}
-            data-side={mark.side}
-            className="transition-colors duration-700"
-            style={{ "--mark": MARK_HEX[mark.colour] } as CSSProperties}
-          >
-            <span className="max-lg:text-[var(--mark)]">{part}</span>
-          </span>
-        );
-      })}
-    </>
-  );
-}
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -63,9 +31,10 @@ export function Work() {
     <section
       id="work"
       aria-labelledby="work-heading"
-      className="scroll-mt-24 overflow-hidden bg-paper pb-[clamp(6rem,12vw,11rem)] pt-[clamp(10rem,18vw,17rem)]"
+      className="scroll-mt-24 overflow-hidden bg-paper pb-[clamp(6rem,12vw,11rem)]"
     >
-      <header className="mx-auto max-w-[1560px] px-5 text-center sm:px-8 lg:px-12">
+      {/* The headline fills the screen on its own, just as the hero does. */}
+      <header className="mx-auto flex min-h-[100svh] max-w-[1560px] flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
         <motion.p {...reveal} transition={{ duration: 0.9, ease: easeOutExpo }} className="text-label uppercase text-ink-soft">
           {clientsIntro.eyebrow}
         </motion.p>
@@ -77,7 +46,7 @@ export function Work() {
         >
           {clientsIntro.titleLines.map((line, index) => (
             <span key={line} className="lg:block lg:whitespace-nowrap">
-              <MarkedLine line={line} />
+              {line}
               {index < clientsIntro.titleLines.length - 1 && " "}
             </span>
           ))}
@@ -85,13 +54,13 @@ export function Work() {
       </header>
 
       {/* Metadata above the wall, and on desktop, how to see the rest. */}
-      <div className="mx-auto mt-[clamp(5rem,9vw,8rem)] flex max-w-[1560px] items-baseline justify-between px-5 text-label uppercase text-ink-soft sm:px-8 lg:px-12">
+      <div className="mx-auto flex max-w-[1560px] items-baseline justify-between px-5 text-label uppercase text-ink-soft sm:px-8 lg:px-12">
         <p className="tabular-nums">
-          {pad(clients.length)} clients · {clientsIntro.since}
+          {clientsClosing.count}+ clients · {clientsIntro.since}
         </p>
         {!calm && (
           <p aria-hidden className="hidden lg:block">
-            Move across the wall <span className="text-orange">→</span>
+            Move across the wall <span className="text-pink">→</span>
           </p>
         )}
       </div>

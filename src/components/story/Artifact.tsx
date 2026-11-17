@@ -70,7 +70,7 @@ function Inner({ kind }: { kind: ArtifactKind }) {
           >
             Aa
           </text>
-          <path d="M-36 17 H36 M-36 -21 H36" className="stroke-orange" />
+          <path d="M-36 17 H36 M-36 -21 H36" className="stroke-pink" />
           <path d="M18 -12 H36 M18 -4 H32 M18 4 H36" className="stroke-ink/40" />
         </g>
       );
@@ -88,8 +88,8 @@ function Inner({ kind }: { kind: ArtifactKind }) {
       // An image frame: horizon, sun, mountains.
       return (
         <g>
-          <rect x={-36} y={-27} width={72} height={54} className="fill-yellow/20" />
-          <circle cx={18} cy={-11} r={7} className="fill-yellow stroke-none" />
+          <rect x={-36} y={-27} width={72} height={54} className="fill-blue/15" />
+          <circle cx={18} cy={-11} r={7} className="fill-pink stroke-none" />
           <path d="M-36 27 L-12 -2 L4 14 L16 4 L36 27" />
         </g>
       );

@@ -1,161 +1,83 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { easeOutExpo } from "@/lib/motion";
-import { useCalmMotion } from "@/lib/useCalmMotion";
-import { HangingWords } from "@/components/motion/HangingWords";
-import { TypedNote } from "@/components/motion/TypedNote";
-import { Magnetic } from "@/components/motion/Magnetic";
-import { site } from "@/data/site";
+import { HeroSpotlight } from "@/components/motion/HeroSpotlight";
+
+/** The statement, one sentence to a line from tablet up. */
+const LINES = ["Ezers!", "You’ve got the ambition.", "We’ll make the market see it."];
 
 const line = {
   hidden: { y: "108%" },
   show: (i: number) => ({
     y: "0%",
-    transition: { duration: 1.15, delay: 0.15 + i * 0.09, ease: easeOutExpo },
+    transition: { duration: 1.1, delay: 0.15 + i * 0.1, ease: easeOutExpo },
   }),
 };
 
 /**
- * Milliseconds after load at which each rope drops. The first waits for the
- * headline to finish rising; the rest follow one by one.
+ * The landing screen: one photograph edge to edge, and the studio's promise
+ * set across it in bold. The picture is darkened towards the left,
+ * where the words sit, so they stay readable whatever it shows.
+ *
+ * To change the picture, replace /public/hero/summit.jpg (or point `src`
+ * at another file); a dark, low-detail image works best under the type.
  */
-const DROPS = [950, 1750, 2550];
-
-/** Set on two full lines by its own measure, rather than a hard break. */
-const NOTE =
-  "We are a creative agency helping ambitious brands look, sound, and move like the market leaders they’re becoming.";
-
 export function Hero() {
-  const calm = useCalmMotion();
-  const [step, setStep] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const noteRowRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // With reduced motion there's nothing to stage: show all three at once.
-    if (calm) {
-      const frame = requestAnimationFrame(() => setStep(DROPS.length));
-      return () => cancelAnimationFrame(frame);
-    }
-    const timers = DROPS.map((at, index) => setTimeout(() => setStep(index + 1), at));
-    return () => timers.forEach(clearTimeout);
-  }, [calm]);
-
-  // On desktop the note sits in the same row as the button, and Move's rope
-  // has to end just above it. Publish where that row lands, relative to the
-  // hero, as --note-top. offsetTop ignores transforms, so the row's entrance
-  // animation doesn't skew it; the observers catch font swaps and resizes.
-  useEffect(() => {
-    const section = sectionRef.current;
-    const content = contentRef.current;
-    const row = noteRowRef.current;
-    if (!section || !content || !row) return;
-
-    const publish = () => {
-      let top = 0;
-      let el: HTMLElement | null = row;
-      while (el && el !== section) {
-        top += el.offsetTop;
-        el = el.offsetParent as HTMLElement | null;
-      }
-      section.style.setProperty("--note-top", `${top}px`);
-    };
-
-    publish();
-    const observer = new ResizeObserver(publish);
-    observer.observe(section);
-    observer.observe(content);
-    return () => observer.disconnect();
-  }, []);
-
-  const note = (
-    <TypedNote
-      active={step >= DROPS.length}
-      delay={0.55}
-      pace={30}
-      text={NOTE}
-      className="w-full text-[0.95rem] font-semibold leading-[1.45] tracking-[-0.01em] sm:max-w-[54ch] sm:text-[0.88rem] lg:text-[clamp(0.85rem,0.98vw,1.02rem)]"
-    />
-  );
-
   return (
     <section
-      ref={sectionRef}
-      className="relative flex min-h-[100svh] flex-col overflow-hidden pb-8 pt-24 sm:pb-10 sm:pt-28 lg:[@media(max-height:760px)]:pb-6 lg:[@media(max-height:760px)]:pt-24"
+      data-nav-theme="paper"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-ink text-paper"
     >
-      <HangingWords step={step} note={note} />
-
+      <Image
+        src="/hero/summit.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-[50%_45%] lg:origin-top lg:scale-[1.4]"
+      />
+      {/* Two washes: an even one to quieten the picture, and one that deepens
+          towards the left under the headline. */}
+      <div aria-hidden className="absolute inset-0 bg-ink/35" />
       <div
-        ref={contentRef}
-        className="relative z-10 mx-auto mt-auto w-full max-w-[1560px] px-5 pb-8 sm:px-8 lg:my-auto lg:px-12 lg:py-10 lg:[@media(max-height:760px)]:py-2"
-      >
-        <div className="lg:max-w-[58%]">
-          <h1 className="text-mega flex w-fit flex-col gap-[0.1em]">
-            <span className="-my-[0.18em] block overflow-hidden py-[0.18em]">
+        aria-hidden
+        className="absolute inset-0 bg-[linear-gradient(75deg,rgb(11_16_19/0.8)_0%,rgb(11_16_19/0.5)_40%,rgb(11_16_19/0)_78%)]"
+      />
+      <HeroSpotlight />
+
+      <div className="relative mx-auto w-full max-w-[1560px] px-5 pb-[clamp(3rem,8svh,6rem)] pt-[clamp(7rem,16svh,10rem)] sm:px-8 lg:px-12">
+        <h1 className="text-[clamp(2.1rem,min(4.6vw,9.5svh),4.75rem)] font-extrabold leading-[0.98] tracking-[-0.04em]">
+          {LINES.map((text, index) => (
+            <span key={text} className="-my-[0.1em] block overflow-hidden py-[0.1em]">
               <motion.span
                 variants={line}
-                custom={0}
+                custom={index}
                 initial="hidden"
                 animate="show"
-                className="block"
+                className="block lg:whitespace-nowrap"
               >
-                Ezers
-                <span className="ml-[0.12em] font-medium text-blue">&amp;</span>
+                {text}
               </motion.span>
             </span>
-            <span className="-my-[0.18em] block overflow-hidden py-[0.18em]">
-              <motion.span
-                variants={line}
-                custom={1}
-                initial="hidden"
-                animate="show"
-                className="block"
-              >
-                Strategies
-              </motion.span>
-            </span>
-          </h1>
+          ))}
+        </h1>
 
-          <span className="mt-3 -mb-[0.15em] block w-fit overflow-hidden pb-[0.15em] sm:mt-5">
-            <motion.span
-              variants={line}
-              custom={2}
-              initial="hidden"
-              animate="show"
-              className="block text-[clamp(1.1rem,2.2vw,1.75rem)] font-medium tracking-[-0.02em] text-ink-soft"
-            >
-              {site.tagline}
-            </motion.span>
-          </span>
-        </div>
-
-        {/* Button and note on one line from desktop up; below that the note
-            hangs under the ropes instead. */}
-        <div className="mt-8 flex items-center justify-between gap-10 sm:mt-10 max-lg:[@media(max-height:700px)]:mt-5 lg:[@media(max-height:760px)]:mt-6">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6, ease: easeOutExpo }}
-            className="shrink-0"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.75, ease: easeOutExpo }}
+          className="mt-[clamp(2rem,4vw,3.25rem)]"
+        >
+          <Link
+            href="/#contact"
+            className="pill inline-flex items-center bg-paper px-7 py-4 text-[0.95rem] font-semibold text-ink transition-colors duration-300 hover:bg-blue hover:text-paper"
           >
-            <Magnetic>
-              <Link
-                href="/#contact"
-                className="pill inline-flex items-center gap-2 border-[2.5px] border-blue px-5 py-3 text-[0.88rem] font-semibold transition-colors duration-300 hover:border-blue-deep hover:bg-blue-deep hover:text-paper sm:px-6 sm:py-3.5 sm:text-[0.9rem]"
-              >
-                Start a Project <span aria-hidden>→</span>
-              </Link>
-            </Magnetic>
-          </motion.div>
-
-          <div ref={noteRowRef} className="hidden lg:block">
-            {note}
-          </div>
-        </div>
+            Start a project
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

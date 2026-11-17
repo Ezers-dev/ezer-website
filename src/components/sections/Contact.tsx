@@ -75,8 +75,9 @@ export function Contact() {
             <div className="grid gap-x-10 gap-y-[clamp(2rem,4vw,3rem)] sm:grid-cols-2">
               <Field name="name" label="Your name" autoComplete="name" placeholder="Ada Okoye" required />
               <Field name="email" label="Email" type="email" autoComplete="email" placeholder="ada@studio.com" required />
-              <Field name="company" label="Company" autoComplete="organization" placeholder="Optional" />
-              <Field name="budget" label="Budget" placeholder="Optional" />
+              <div className="sm:col-span-2">
+                <Field name="company" label="Company" autoComplete="organization" placeholder="Optional" />
+              </div>
             </div>
 
             <div className="mt-[clamp(2rem,4vw,3rem)]">
