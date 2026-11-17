@@ -49,13 +49,8 @@ type Progress = { progress: MotionValue<number> };
 
 const LABEL = { fontSize: 13, fontWeight: 600, letterSpacing: "0.16em" } as const;
 
-/**
- * The canvas colour for a stage. Thin yellow strokes almost vanish on paper,
- * so the canvas draws that stage in a deeper gold; the panel on the left keeps
- * the true brand yellow.
- */
-const accentFor = (color: (typeof storyStages)[number]["color"]) =>
-  color === "yellow" ? "#d9a300" : panelHex[color];
+/** The canvas colour for a stage. */
+const accentFor = (color: (typeof storyStages)[number]["color"]) => panelHex[color];
 
 /* ------------------------------------------------------------------ map */
 
@@ -459,7 +454,7 @@ export function JourneyCanvas({ progress }: Progress) {
         window={[at(STAGE.impact, 0.78), at(STAGE.impact, 0.98)]}
         from={[SYSTEM_FRAME.x + SYSTEM_FRAME.w, SYSTEM_FRAME.y + SYSTEM_FRAME.h - 20]}
         to={[600, 740]}
-        text="160+ clients"
+        text="25+ clients"
       />
     </svg>
   );

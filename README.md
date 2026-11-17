@@ -22,7 +22,7 @@ All copy and imagery lives in `src/data/` — no component edits needed.
 | `src/data/work.ts` | Case studies (also generates `/work/[slug]` pages) |
 | `src/data/team.ts` | People |
 | `src/data/clients.ts` | Client list for the logo marquee |
-| `src/data/services.ts` | The four disciplines |
+| `src/data/services.ts` | The five services |
 
 **Images.** Every item names an image path, e.g. `/work/kitchen-affairs.jpg`.
 Until a file exists at that path in `public/`, the site renders a flat brand
@@ -44,7 +44,7 @@ and for accents on the paper background. `--color-blue-deep` and
 `--color-pink-deep` are slightly darkened panel tints — the deepest values that
 still clear WCAG AA for white body text — and are what full-bleed sections use.
 `src/lib/colors.ts` routes each case to the right one; `panelBg` is the map for
-any full-bleed panel. Green, orange and yellow panels take ink text.
+any full-bleed panel. Green panels take ink text. Sections use blue, magenta and green only.
 
 The logo is drawn as inline SVG in `src/components/Logo.tsx` so it recolours per
 section; `onDark` flips disc and pills for use on a coloured panel.

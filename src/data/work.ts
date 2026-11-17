@@ -84,7 +84,7 @@ export const work: Project[] = [
     disciplines: ["Branding", "Digital"],
     image: "/work/lumen-fintech.jpg",
     aspect: "square",
-    color: "orange",
+    color: "pink",
     summary: "Naming, identity and product language for a lending platform.",
     challenge:
       "An early-stage team with a strong product and no vocabulary to explain it.",
@@ -101,7 +101,7 @@ export const work: Project[] = [
     disciplines: ["Branding", "Content Creation"],
     image: "/work/kitchen-affairs.jpg",
     aspect: "portrait",
-    color: "yellow",
+    color: "green",
     summary:
       "Three venues, one parent brand, and a content engine to keep it fed.",
     challenge:

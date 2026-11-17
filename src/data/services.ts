@@ -2,43 +2,56 @@ import type { BrandColor } from "@/lib/colors";
 
 export type Service = {
   title: string;
+  /** A second, smaller line under the title, where the service names its medium. */
+  subtitle?: string;
+  /** The promise, set bold. */
   summary: string;
+  /** What it covers. */
   detail: string[];
   color: BrandColor;
 };
 
+/** In the order they are presented. Colours cycle blue, magenta, green. */
 export const services: Service[] = [
   {
-    title: "Branding",
-    summary:
-      "We define what your brand stands for and make sure it looks like it.",
+    title: "Communication Strategy",
+    summary: "The right message, to the right people, inside and out.",
     detail: [
-      "From naming and logo systems to full identity guidelines, we build brand foundations that hold up as you scale.",
+      "Internal and external comms plans that align your team and win over your audience.",
     ],
     color: "blue",
   },
   {
-    title: "Digital",
-    summary:
-      "We help clients harness digital channels to drive real outcomes: more traffic, stronger engagement, higher conversion.",
-    detail: ["Strategy-led, platform-agnostic, built around your audience."],
+    title: "Branding & Design",
+    summary: "Look like the leader you’re becoming.",
+    detail: [
+      "Logos, visual identity, and design that make your brand instantly recognizable.",
+    ],
     color: "pink",
   },
   {
-    title: "Creative Strategy",
-    summary: "Before we design anything, we ask why.",
+    title: "Corporate Storytelling",
+    subtitle: "Video & Photography",
+    summary: "Your people, your proof, your story, told well.",
     detail: [
-      "We work closely with clients to shape a clear creative vision that ties directly back to business and marketing objectives, not just trends.",
+      "Video testimonials and professional photography that turn real experiences into trust.",
     ],
     color: "green",
   },
   {
     title: "Content Creation",
-    summary:
-      "We produce high-quality content — social, print, campaign — that resonates with your audience.",
+    summary: "Content with a point, not just a post.",
     detail: [
-      "Built to keep your brand consistently visible across the media space.",
+      "Copy, newsletters, blogs, and campaign assets built around what you want people to do.",
     ],
-    color: "orange",
+    color: "blue",
+  },
+  {
+    title: "Social Media Management",
+    summary: "Show up consistently. Stand out constantly.",
+    detail: [
+      "Planning, posting, and community management so your brand stays visible without the stress.",
+    ],
+    color: "pink",
   },
 ];

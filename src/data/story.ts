@@ -64,7 +64,7 @@ export const storyStages: StoryStage[] = [
   {
     id: "global",
     label: "Global",
-    color: "orange",
+    color: "blue",
     title: "Across borders.",
     body: [
       "Over a decade later, that belief has taken us across borders — we now operate out of both Nigeria and Canada, serving a growing roster of start-ups, multinational organizations, and personal brands.",
@@ -73,7 +73,7 @@ export const storyStages: StoryStage[] = [
   {
     id: "impact",
     label: "Impact",
-    color: "yellow",
+    color: "pink",
     title: "One idea. Real impact.",
     body: [
       "We’ve spent 12+ years learning what makes a brand memorable in crowded markets. Now we bring that experience to founders building something new, institutions protecting decades of reputation, and individuals turning personal influence into a business.",
@@ -87,10 +87,7 @@ export type StoryStat = {
 };
 
 export const storyStats: StoryStat[] = [
-  { value: "160+", label: "Clients served" },
+  { value: "25+", label: "Clients served" },
   { value: "12+", label: "Years in business" },
   { value: "2", label: "Continents" },
-  { value: "2", label: "Countries" },
 ];
-
-export const storyClosing = "12+ years of making brands matter.";

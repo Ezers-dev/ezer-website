@@ -22,31 +22,18 @@ export const clients: Client[] = [
   { name: "Westminster Security Solutions", logo: "/clients/westminster.png", width: 270, height: 230 },
 ];
 
-/**
- * The headline, in the lines it is set in on desktop. Each marked word sits at
- * the start or end of a line, where a line from the team book can reach it
- * from the side without crossing the other words.
- */
+/** The headline, in the lines it is set in on desktop. */
 const titleLines = ["Brands, campaigns, and", "content created to stand", "out in crowded markets."];
-
-export type MarkColour = "pink" | "green" | "blue" | "orange";
 
 export const clientsIntro = {
   eyebrow: "Our Works",
   title: titleLines.join(" "),
   titleLines,
-  /** Words the lines from the book land on, which take the line's colour. */
-  marks: [
-    { text: "Brands", colour: "pink", side: "left" },
-    { text: "out in", colour: "green", side: "left" },
-    { text: "stand", colour: "blue", side: "right" },
-    { text: "markets.", colour: "orange", side: "right" },
-  ] as { text: string; colour: MarkColour; side: "left" | "right" }[],
   since: "2012 — Present",
 };
 
 export const clientsClosing = {
-  count: 160,
+  count: 25,
   label: "clients served",
   line: "Many industries. Many challenges. One creative standard.",
 };

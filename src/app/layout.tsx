@@ -21,12 +21,14 @@ export const metadata: Metadata = {
     template: `%s — ${site.name}`,
   },
   description:
-    "A creative agency helping ambitious brands look, sound, and move like the market leaders they're becoming. Branding, digital, creative strategy and content, from Nigeria and Canada.",
+    "You’ve got the ambition. We’ll make the market see it. Communication strategy, branding and design, corporate storytelling, content and social media, from Nigeria and Canada.",
   keywords: [
     "creative agency",
     "branding",
     "brand identity",
-    "digital strategy",
+    "communication strategy",
+    "corporate storytelling",
+    "social media management",
     "content creation",
     "Nigeria",
     "Canada",
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: `${site.name} — ${site.tagline}`,
     description:
-      "Branding, digital, creative strategy and content for ambitious brands. 160+ clients, 12+ years, two continents.",
+      "Communication strategy, branding, storytelling, content and social media for ambitious brands. 25+ clients, 12+ years, two continents.",
     url: site.url,
   },
   twitter: { card: "summary_large_image" },

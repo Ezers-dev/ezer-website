@@ -3,31 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import {
   animate,
-  easeInOut,
   motion,
   useInView,
   useMotionValue,
-  useTransform,
-  type MotionValue,
 } from "motion/react";
 import { useCalmMotion } from "@/lib/useCalmMotion";
 
 /*
  * One brand colour per word, in the tones this project uses for text on
- * paper: the pure orange, green and yellow are too light to read at any
+ * paper: the pure green is too light to read at any
  * size, so each word takes the readable version of its brand colour.
  */
 const WORD_COLOURS = [
   "#0071b0", // blue
   "#d6004a", // pink
   "#5e9234", // green
-  "#c2521a", // orange
-  "#9a7400", // yellow
+  "#d6004a", // pink
+  "#5e9234", // green
   "#0071b0", // blue again for the last word, which stays blue and keeps the circle
 ];
-
-/** The words' own colour, before the ball touches them and after scrolling on. */
-const INK = "#0b1013";
 
 /**
  * "seen." is always this blue, circle and all, whatever the scroll or the
@@ -51,18 +45,7 @@ export const RING = {
   heading: { x: -8, y: 34 },
 } as const;
 
-/** Drop between one step and the next, in ems of the headline size. */
-const STEP = 0.62;
-
 const BALL = 22;
-
-/*
- * Scroll progress through the pinned opening (0 → 1). The steps close into a
- * line over the first half, and the colours fade back to ink a little behind
- * them, so the last thing to settle is the colour.
- */
-const ALIGN: [number, number] = [0.05, 0.5];
-const FADE: [number, number] = [0.1, 0.55];
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -70,18 +53,13 @@ type WordProps = {
   word: string;
   index: number;
   count: number;
-  progress: MotionValue<number>;
   lit: boolean;
   shown: boolean;
   calm: boolean;
   setRef: (el: HTMLSpanElement | null) => void;
 };
 
-function Word({ word, index, count, progress, lit, shown, calm, setRef }: WordProps) {
-  // Staircase: the first word highest, the last lowest, centred on the line.
-  const offset = (index - (count - 1) / 2) * STEP;
-  const y = useTransform(progress, ALIGN, [`${offset}em`, "0em"], { ease: easeInOut });
-  const colour = useTransform(progress, FADE, [WORD_COLOURS[index % WORD_COLOURS.length], INK]);
+function Word({ word, index, count, lit, shown, calm, setRef }: WordProps) {
   const last = index === count - 1;
 
   return (
@@ -90,13 +68,12 @@ function Word({ word, index, count, progress, lit, shown, calm, setRef }: WordPr
       initial={false}
       animate={{ opacity: shown ? 1 : 0 }}
       transition={{ duration: calm ? 0 : 0.45, delay: calm ? 0 : index * 0.09, ease: "easeOut" }}
-      // Until the ball lands here the word keeps its own colour; after that
-      // the colour is scrubbed by scroll, back to ink and out again. The last
-      // word is the exception: it stays blue throughout.
-      style={{ y, color: last ? SEEN_BLUE : lit ? colour : undefined }}
+      // Ink until the ball lands here, then the word keeps its brand colour.
+      // The last word is the exception: it is blue throughout.
+      style={{ color: last ? SEEN_BLUE : lit ? WORD_COLOURS[index % WORD_COLOURS.length] : undefined }}
       // Marks the last word so the line out of its circle can find it.
       data-seen={last || undefined}
-      className="relative inline-block will-change-transform"
+      className="relative inline-block transition-colors duration-300"
     >
       {word}
       {last && (
@@ -126,21 +103,17 @@ function Word({ word, index, count, progress, lit, shown, calm, setRef }: WordPr
 
 type BouncingHeadlineProps = {
   words: string[];
-  /** Scroll progress through the pinned opening, 0 → 1. */
-  progress: MotionValue<number>;
   className?: string;
 };
 
 /**
- * The section's statement. On arrival the words step in as a staircase and a
- * ball bounces down it, lighting each word in a brand colour as it lands.
- * Scrolling on closes the steps into one centred line and fades the colours
- * back to ink; scrolling back reverses both.
+ * The section's statement, set as one straight, centred line. On arrival a
+ * ball bounces along it, lighting each word in a brand colour as it lands;
+ * the words keep those colours.
  *
- * With reduced motion the ball never appears, and the line simply follows the
- * progress it is given.
+ * With reduced motion the ball never appears and the words are simply lit.
  */
-export function BouncingHeadline({ words, progress, className = "" }: BouncingHeadlineProps) {
+export function BouncingHeadline({ words, className = "" }: BouncingHeadlineProps) {
   const calm = useCalmMotion();
   const holderRef = useRef<HTMLHeadingElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -165,8 +138,7 @@ export function BouncingHeadline({ words, progress, className = "" }: BouncingHe
 
     let cancelled = false;
 
-    // Where the ball rests on top of word `i`, measured fresh each hop: the
-    // words may already be moving if the visitor keeps scrolling.
+    // Where the ball rests on top of word `i`.
     const spotFor = (i: number) => {
       const holder = holderRef.current!;
       const base = holder.getBoundingClientRect();
@@ -181,8 +153,8 @@ export function BouncingHeadline({ words, progress, className = "" }: BouncingHe
       if (cancelled || !holderRef.current) return;
 
       const first = spotFor(0);
-      x.set(first.x - 140);
-      y.set(first.y - 240);
+      x.set(first.x - 120);
+      y.set(first.y - 150);
       opacity.set(1);
       setBallOn(true);
 
@@ -235,7 +207,6 @@ export function BouncingHeadline({ words, progress, className = "" }: BouncingHe
             word={word}
             index={index}
             count={words.length}
-            progress={progress}
             lit={index <= lit}
             shown={shown}
             calm={calm}
